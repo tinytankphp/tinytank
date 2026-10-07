@@ -55,6 +55,7 @@ final class BlogPagesTest extends AppTestCase
 
         self::assertSame(404, $this->request($app, '/blog/page/4')->getStatusCode());
         self::assertSame(404, $this->request($app, '/blog/page/0')->getStatusCode());
+        self::assertSame(404, $this->request($app, '/blog/page/99999999999999999999')->getStatusCode(), 'not a 500');
         $it = $this->request($app, '/it/blog/page/2');
         self::assertSame(404, $it->getStatusCode(), 'Italian has one post, so one page');
         self::assertStringContainsString('Pagina non trovata.', self::body($it));

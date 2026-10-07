@@ -301,22 +301,26 @@ suites passing, and its probes reproduced twelve problems at the edges (extensio
 failures, odd input, docs promising more than the code). All twelve were verified against the code.
 Its advice, which we share: sharpen what exists rather than grow. Batches in the agreed order:
 
-### [ ] 3.1 Hardening: small bugs, each with a regression test
-- [ ] **Signed Datastar actions bound to their method**: a `datastar.post()` URL also works with GET
+### [x] 3.1 Hardening: small bugs, each with a regression test
+- [x] **Signed Datastar actions bound to their method**: a `datastar.post()` URL also works with GET
       today (the signature covers template and variables only, CSRF applies to unsafe methods). Sign
       the method, refuse others (HEAD allowed for GET); document that mutations belong in controllers
       and signed variables are readable and replayable
-- [ ] **Custom spam checks registered as documented**: `Forms` validates check names in its
+- [x] **Custom spam checks registered as documented**: `Forms` validates check names in its
       constructor, before `config/bootstrap.php` can call `addSpamCheck()`. Validate after bootstrap
       (a misspelled check still fails at boot); test it the way a package uses it
-- [ ] **Pagination overflow**: `/blog/page/<huge number>` is a 500 (`($page - 1) * $perPage` becomes
+- [x] **Pagination overflow**: `/blog/page/<huge number>` is a 500 (`($page - 1) * $perPage` becomes
       a float). Clamp before multiplying; limit the route's digits
-- [ ] **Strict dates**: `2026-02-30` is accepted as `2026-03-02`; the parsed date must format back to
+- [x] **Strict dates**: `2026-02-30` is accepted as `2026-03-02`; the parsed date must format back to
       the same string
-- [ ] **Datastar event queue reset per request**: a template failing halfway leaves its queued events
+- [x] **Datastar event queue reset per request**: a template failing halfway leaves its queued events
       for the next request on the same kernel (tests, workers)
-- [ ] **`persist()` reads `globalThis.localStorage` outside its `try`** (as a default parameter): in
+- [x] **`persist()` reads `globalThis.localStorage` outside its `try`** (as a default parameter): in
       Safari with blocked storage or a sandboxed iframe, merely reading it throws
+      Done: the method is signed into Datastar configs (`m`), other methods get a 405, configs from
+      before are refused (400); forms are validated after bootstrap (fixture spam check `word`); dates
+      are checked before YAML reads them (`Starlite\Content\StrictYaml`, also for collections, and
+      always Symfony YAML now); the skeleton's blog page route takes at most 6 digits.
 
 ### [ ] 3.2 License and release basics
 - [ ] **License**: no `LICENSE` file or Composer `license` field in the framework or the skeleton yet,
