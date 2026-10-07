@@ -8,7 +8,7 @@ and a deploy pipeline, with no database and no admin panel. A new site starts fr
 This roadmap lists what makes such sites easy to build and keep up to date. The first site will be
 **Nocturne**, a calm ambient-sound mixer (claude.ai/design project "Nocturne Mockups"): a blog of
 SEO articles around the app, plus a custom controller for the mixer on the home page. Its review
-surfaced most of the generic needs below; Nocturne's own logic stays in its repository (section 4).
+surfaced most of the generic needs below; Nocturne's own logic stays in its repository (section 5).
 
 Status: `[ ]` to do · `[~]` in progress · `[x]` done
 
@@ -294,7 +294,98 @@ favicon (the missing one logged a 404 on every page).
 
 ---
 
-## 3. Nice to have
+## 3. Stabilization (after the external review of 2026-10-06)
+
+An external review (kept locally, not in the repository) checked the framework at `917b076`: all
+suites passing, and its probes reproduced twelve problems at the edges (extension order, deploy
+failures, odd input, docs promising more than the code). All twelve were verified against the code.
+Its advice, which we share: sharpen what exists rather than grow. Batches in the agreed order:
+
+### [ ] 3.1 Hardening: small bugs, each with a regression test
+- [ ] **Signed Datastar actions bound to their method**: a `datastar.post()` URL also works with GET
+      today (the signature covers template and variables only, CSRF applies to unsafe methods). Sign
+      the method, refuse others (HEAD allowed for GET); document that mutations belong in controllers
+      and signed variables are readable and replayable
+- [ ] **Custom spam checks registered as documented**: `Forms` validates check names in its
+      constructor, before `config/bootstrap.php` can call `addSpamCheck()`. Validate after bootstrap
+      (a misspelled check still fails at boot); test it the way a package uses it
+- [ ] **Pagination overflow**: `/blog/page/<huge number>` is a 500 (`($page - 1) * $perPage` becomes
+      a float). Clamp before multiplying; limit the route's digits
+- [ ] **Strict dates**: `2026-02-30` is accepted as `2026-03-02`; the parsed date must format back to
+      the same string
+- [ ] **Datastar event queue reset per request**: a template failing halfway leaves its queued events
+      for the next request on the same kernel (tests, workers)
+- [ ] **`persist()` reads `globalThis.localStorage` outside its `try`** (as a default parameter): in
+      Safari with blocked storage or a sandboxed iframe, merely reading it throws
+
+### [ ] 3.2 License and release basics
+- [ ] **License**: no `LICENSE` file or Composer `license` field in the framework or the skeleton yet,
+      so nobody else may legally use them. Choose (MIT is usual: Symfony, Slim, Datastar)
+- [ ] **First tagged release** (`v0.1.0` or `v1.0.0-beta.1`), `CHANGELOG.md`, upgrade notes when the
+      skeleton changes; Packagist optional
+- [ ] **`SECURITY.md`**: private vulnerability reporting (GitHub's is enough)
+- [ ] **Composer `require`**: `ext-intl`, `ext-mbstring`, `ext-xmlwriter` (sitemap, feed); GD or Imagick
+      in `suggest` (Composer can't say "one of") and in `check`
+- [ ] **Dependabot** (Composer, npm, GitHub Actions): weekly advisory and update PRs
+
+### [ ] 3.3 Caching boundary
+- [ ] A response with **`Set-Cookie`** (or one marked private by its handler) gets `private, no-store`,
+      never `public`, CDN or not; `$app->noStore()` as the public version of what forms use. This is
+      the "pages that read the session are private" rule, decided before any login feature
+- [ ] Docs: `cdn->skip()` means "not at the CDN" (still `public, no-cache` for browsers), `noStore()`
+      means "nowhere"; tests with CDN caching on
+- [ ] Possibly extract the response policy (caching, CSP, headers) from the Kernel while there, and
+      replace the bound-closure read of Symfony's cache-control state with an explicit marker
+
+### [ ] 3.4 Deploy safety and `bin/console check`
+- [ ] **Build first, switch last**: `deploy` empties `var/cache` before validating anything, so a
+      failure halfway leaves the live site half-built. Compile into `var/cache.next/` (and publish media
+      to a `.next` folder), validate, then swap; keep `.prev` for `deploy --rollback`. Acceptance: a
+      failing step leaves the old site intact
+- [ ] **Runtime state out of the cache**: form rate limits live in `var/cache/forms/`, so every deploy
+      resets them. Move them (and the alert dedup file) to `var/state/`, kept across deploys
+- [ ] **Missing Vite manifest fails the deploy** (pages need it), with an opt-out for sites without Vite
+- [ ] **`bin/console check`**, read-only preflight, also run first by `deploy`: PHP version and
+      extensions, image driver and formats, `APP_SECRET`/`APP_URL`, writable `var/`, content compiles,
+      **page templates and forms exist** (a page with a missing `template:` deploys today, then 500s),
+      components, the Vite manifest and its entries, shadowed pages; `--json` for CI
+- [ ] **Images loaded lazily**: without GD or Imagick the site doesn't boot at all today, even pages
+      without images (`Images` probes the driver in its constructor)
+- [ ] **Boot errors handled**: a minimal `try/catch` in `public/index.php` (plain 500 and PHP's log in
+      production, rethrow in debug), since errors during `boot()` bypass the framework's handler
+- [ ] Docs: a release-directory recipe (Deployer, symlinked `current/`) for servers where you control
+      the web root
+
+### [ ] 3.5 Small site features and docs
+- [ ] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy
+- [ ] **`noindex` / `sitemap: false`** in page front matter, and a route option to stay out of the
+      sitemap (every parameterless GET route is listed today: a `/healthz` or `/thanks` would be too)
+- [ ] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
+      `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413
+- [ ] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
+      saves transfer, the handler still runs; what the log's defaults leave out vs. what your own
+      messages may contain; the controllers guide's Blog methods (`find()`, `page()`, `search()`,
+      `tags()` no longer exist); `composer test` runs the app's suite only
+- [ ] **SVG in `/media`**: a server snippet serving them with a script-blocking CSP, as development does
+- [ ] **Health check recipe** (docs): a route answering 200 when the compiled cache is readable
+- [ ] Docs: PHP-FPM (one kernel per request) is the supported model; worker servers aren't (yet)
+
+### Deferred until there's evidence
+Compiled media manifest (dimensions, variants, posters); content-hashed media URLs; query indexes and
+precomputed search text; request/response hooks (when Nocturne or an API needs them); CI matrix
+(PHP 8.5, GD + Imagick, lowest dependencies) before a 1.0; durable mail outbox (document that delivery
+is synchronous); worker servers.
+
+### Declined, with reasons
+- **Video, CDN purgers and email alerts as separate packages**: they cost nothing when unused (off by
+  default, or only run when a post uses them); splitting adds releases and docs for no runtime gain.
+  The image driver is the real case, fixed by lazy loading
+- **PSR-7/PSR-15 middleware**: HttpFoundation is deliberate; a bridge only for a real integration
+- **Formal pilot programme and benchmarks**: Nocturne is the pilot
+
+---
+
+## 4. Nice to have
 
 - [x] **Translate the site name and description** (`config/app.php` → `site`): each value is a string
       or a map language => value (name, description, share image, author); `$site->name()` etc. in
@@ -359,7 +450,7 @@ favicon (the missing one logged a 404 on every page).
 
 ---
 
-## 4. For the Nocturne repository (not Starlite)
+## 5. For the Nocturne repository (not Starlite)
 
 Kept here only as a reminder of what the Nocturne site will add on top of Starlite:
 
@@ -382,7 +473,8 @@ Kept here only as a reminder of what the Nocturne site will add on top of Starli
    Nocturne needs on day one
 3. ~~Data collections, content query API, content pages, media embeds, helpers, frontend tests~~,
    UI building blocks, PWA
-4. Create the Nocturne site from the skeleton; section 3 items as projects need them
+4. Stabilization (section 3), in its batch order
+5. Create the Nocturne site from the skeleton; section 4 items as projects need them
 
 ---
 

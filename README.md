@@ -65,4 +65,4 @@ that file too (`tests/LicensesTest.php` checks it).
 ## Contributing to Starlite
 
 Maintainers work on the skeleton, the framework and the docs side by side: see
-[CONTRIBUTING.md](CONTRIBUTING.md). The roadmap is in [PLAN.md](PLAN.md).
+[CONTRIBUTING.md](CONTRIBUTING.md). The roadmap is in [ROADMAP.md](ROADMAP.md).
