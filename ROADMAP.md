@@ -8,7 +8,7 @@ and a deploy pipeline, with no database and no admin panel. A new site starts fr
 This roadmap lists what makes such sites easy to build and keep up to date. The first site will be
 **Nocturne**, a calm ambient-sound mixer (claude.ai/design project "Nocturne Mockups"): a blog of
 SEO articles around the app, plus a custom controller for the mixer on the home page. Its review
-surfaced most of the generic needs below; Nocturne's own logic stays in its repository (section 5).
+surfaced most of the generic needs below; Nocturne's own logic stays in its repository (section 6).
 
 Status: `[ ]` to do · `[~]` in progress · `[x]` done
 
@@ -462,7 +462,25 @@ is synchronous); worker servers.
 
 ---
 
-## 5. For the Nocturne repository (not TinyTank)
+## 5. The TinyTank website: the first field test
+
+`tinytank.dev`, built with TinyTank by creating a site the way users will
+(`composer create-project tinytank/tinytank`, framework from Packagist at `v0.1.0`), in its own
+repository. The docs move to `docs.tinytank.dev` (VitePress). It's both the project's landing page and
+the first real site: every friction point (install, docs gaps, missing hooks, deploy on a real host)
+is written down and fixed in the framework, and released as 0.1.x.
+
+- [ ] Hosting with PHP 8.4 (TinyTank needs a PHP origin; GitHub Pages can't run it), HTTPS, deploy
+      with `bin/console deploy`; possibly a CDN in front (CDN caching, `cdn:purge`)
+- [ ] Content: what TinyTank is and who it's for, features (privacy first), a short code example, the
+      quick start, when to choose something else, links to the docs and GitHub
+- [ ] English first; another language to exercise translated slugs, if wanted
+- [ ] A friction log, turned into framework issues and fixes
+- [ ] Until it's live: `tinytank.dev` redirects to `docs.tinytank.dev` (at the DNS provider)
+
+---
+
+## 6. For the Nocturne repository (not TinyTank)
 
 Kept here only as a reminder of what the Nocturne site will add on top of TinyTank:
 
@@ -485,8 +503,9 @@ Kept here only as a reminder of what the Nocturne site will add on top of TinyTa
    Nocturne needs on day one
 3. ~~Data collections, content query API, content pages, media embeds, helpers, frontend tests~~,
    UI building blocks, PWA
-4. Stabilization (section 3), in its batch order
-5. Create the Nocturne site from the skeleton; section 4 items as projects need them
+4. Stabilization (section 3), in its batch order, as the field tests show what matters
+5. The TinyTank website (section 5): the first field test
+6. Create the Nocturne site from the skeleton; section 4 items as projects need them
 
 ---
 

@@ -14,7 +14,7 @@ server renders HTML, the browser stays light).
 **This repository is the site skeleton: start every new site from it.** The framework itself is the
 [`tinytank/framework`](https://github.com/tinytankphp/framework) package, installed by Composer.
 
-📖 **Documentation: https://tinytank.dev/**
+🌐 **Website: https://tinytank.dev/** · 📖 **Documentation: https://docs.tinytank.dev/**
 
 ## Create a site
 
@@ -31,7 +31,7 @@ ddev npm run dev             # Vite + Tailwind with hot reload
 ```
 
 Then remove `/composer.lock` from `.gitignore` and commit your lock file. See
-[Installation](https://tinytank.dev/1.x/getting-started/installation)
+[Installation](https://docs.tinytank.dev/1.x/getting-started/installation)
 for the details and for setups without DDEV.
 
 ## Your site, TinyTank's framework
@@ -44,7 +44,7 @@ deploy steps in `config/bootstrap.php`, code in `src/`, templates in `templates/
 ddev composer update tinytank/framework
 ```
 
-See [Building a site on TinyTank](https://tinytank.dev/1.x/extending/).
+See [Building a site on TinyTank](https://docs.tinytank.dev/1.x/extending/).
 
 ## Common commands
 
