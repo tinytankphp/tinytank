@@ -1,5 +1,5 @@
 {
-    "name": "you/starlite",
+    "name": "tinytank/tinytank",
     "description": "Starlite site skeleton: start a new site from here. The framework is the starlite/framework package.",
     "type": "project",
     "repositories": [
@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=8.4",
-        "starlite/framework": "^1.0@dev"
+        "starlite/framework": "^0.1@dev"
     },
     "require-dev": {
         "phpstan/phpstan": "^2",
