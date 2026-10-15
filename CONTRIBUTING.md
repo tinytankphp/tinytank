@@ -1,12 +1,12 @@
-# Contributing to Starlite
+# Contributing to TinyTank
 
-Starlite is three repositories:
+TinyTank is three repositories:
 
 | Repository | What it is | In a site |
 |---|---|---|
-| [lab909/starlite](https://github.com/lab909/starlite) | this site skeleton | the starting point, via **Use this template** |
-| [lab909/starlite-framework](https://github.com/lab909/starlite-framework) | the framework package, `starlite/framework` | `vendor/starlite/framework`, installed by Composer |
-| [lab909/starlite-framework-docs](https://github.com/lab909/starlite-framework-docs) | the documentation (VitePress) | not included |
+| [tinytankphp/tinytank](https://github.com/tinytankphp/tinytank) | this site skeleton | the starting point, via **Use this template** |
+| [tinytankphp/framework](https://github.com/tinytankphp/framework) | the framework package, `tinytank/framework` | `vendor/tinytank/framework`, installed by Composer |
+| [tinytankphp/docs](https://github.com/tinytankphp/docs) | the documentation (VitePress) | not included |
 
 ## Maintainer setup: all three side by side
 
@@ -15,21 +15,21 @@ other two repositories **inside** this one. Both locations are gitignored, so no
 is ever published with the skeleton:
 
 ```sh
-git clone git@github.com:lab909/starlite.git && cd starlite
-git clone git@github.com:lab909/starlite-framework.git packages/starlite
-git clone git@github.com:lab909/starlite-framework-docs.git docs
+git clone git@github.com:tinytankphp/tinytank.git && cd tinytank
+git clone git@github.com:tinytankphp/framework.git packages/tinytank
+git clone git@github.com:tinytankphp/docs.git docs
 ddev start
-ddev composer update starlite/framework     # now symlinks packages/starlite instead of using GitHub
+ddev composer update tinytank/framework     # now symlinks packages/tinytank instead of using Packagist
 ```
 
-How it works: `composer.json` lists a path repository (`packages/*`) before the framework's GitHub
-repository. When `packages/starlite` exists, Composer prefers it and symlinks it into
-`vendor/starlite/framework`, so framework edits take effect immediately. In a regular clone the
-`packages/` folder is empty (only `.gitkeep`) and Composer installs from GitHub.
+How it works: `composer.json` lists a path repository (`packages/*`), which Composer checks before
+Packagist. When `packages/tinytank` exists, Composer uses it and symlinks it into
+`vendor/tinytank/framework`, so framework edits take effect immediately. In a regular clone the
+`packages/` folder is empty (only `.gitkeep`) and Composer installs the framework from Packagist.
 
 Because the source differs, `composer.lock` is never committed in the skeleton.
 
-Each clone is its own git repository: commit and push framework changes from `packages/starlite`,
+Each clone is its own git repository: commit and push framework changes from `packages/tinytank`,
 docs changes from `docs/`, and skeleton changes from the root.
 
 ## Running the checks
@@ -42,8 +42,8 @@ ddev composer test && ddev composer analyse
 ddev npm run build && ddev exec CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
 
 # the framework
-cd packages/starlite && composer update && composer test && composer analyse
-cd packages/starlite && npm install && npm test    # Vitest: the browser helpers
+cd packages/tinytank && composer update && composer test && composer analyse
+cd packages/tinytank && npm install && npm test    # Vitest: the browser helpers
 
 # the docs
 cd docs && npm install && npm run build     # npm run dev → https://<project>.ddev.site:5174
@@ -51,12 +51,28 @@ cd docs && npm install && npm run build     # npm run dev → https://<project>.
 
 Without `npm run build` in the root, the app tests that check built assets are skipped.
 
+## Releasing
+
+The framework is released with tags; sites require `^0.1@dev` and, with `prefer-stable`, get the
+latest tag. The skeleton's CI tests against the framework's `main` branch instead.
+
+1. In `packages/tinytank`: move the entries under **Unreleased** in `CHANGELOG.md` to a new version
+   with today's date, including what sites must change. While TinyTank is 0.x, behaviour changes
+   need a new minor version (0.2.0); fixes only, a patch (0.1.1).
+2. All checks green (above), then commit and tag: `git tag -a v0.1.1 -m "TinyTank 0.1.1"`.
+3. A new minor version: update `extra.branch-alias` (`"dev-main": "0.2.x-dev"`) in the framework's
+   `composer.json`, the constraint in the skeleton's `composer.json` (`^0.2@dev`) and the docs
+   (Updating TinyTank).
+4. Push the framework with its tag first (`git push --follow-tags`), then the skeleton, then the docs.
+   Optionally, tag the skeleton with the same version, and create a GitHub release from the
+   changelog entry.
+
 ## Guidelines
 
 - Keep the framework free of `App\` code: anything a site might change belongs in the skeleton, or
   needs an extension point in the framework.
 - Every behaviour change comes with a test in the framework or the app suite, and a docs update.
-- Prefer proven libraries for infrastructure; Starlite's own code is the glue between them.
+- Prefer proven libraries for infrastructure; TinyTank's own code is the glue between them.
 - PHPStan level 8 must stay clean in both repositories.
 
 ## Suggesting docs changes

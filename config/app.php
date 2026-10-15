@@ -91,7 +91,7 @@ return [
     // Each value is the same in every language, or a map language => value; a language left out of
     // a map uses the default language's (null in a map: none in that language, e.g. no image).
     'site' => [
-        'name' => 'Starlite',
+        'name' => 'TinyTank',
         'description' => [
             'en' => 'A database-free PHP micro framework for static-like dynamic sites.',
             'it' => 'Un micro framework PHP senza database per siti dinamici veloci come quelli statici.',

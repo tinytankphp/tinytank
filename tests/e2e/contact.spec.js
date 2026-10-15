@@ -3,7 +3,7 @@ import { expect, test } from './fixtures.js';
 // The timing spam check refuses forms sent within 3 seconds of being shown: wait like a person would.
 const humanPause = 3200;
 
-async function fillIn(page, message = 'Hello, a question about Starlite.') {
+async function fillIn(page, message = 'Hello, a question about TinyTank.') {
     await page.getByLabel('Name').fill('Ada Lovelace');
     await page.getByLabel('Email').fill('ada@example.test');
     await page.getByLabel('Message').fill(message);
@@ -35,7 +35,7 @@ test.describe('without JavaScript', () => {
         await page.goto('/it/contatti');
         await page.getByLabel('Nome').fill('Ada Lovelace');
         await page.getByLabel('Email').fill('ada@example.test');
-        await page.getByLabel('Messaggio').fill('Ciao, una domanda su Starlite.');
+        await page.getByLabel('Messaggio').fill('Ciao, una domanda su TinyTank.');
         await page.waitForTimeout(humanPause);
         await page.getByRole('button', { name: 'Invia' }).click();
 

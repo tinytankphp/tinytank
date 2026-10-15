@@ -1,4 +1,4 @@
-# Starlite
+# TinyTank
 
 A tiny, database-free PHP micro framework for static-like dynamic sites: **Datastar** for
 reactivity, **Symfony Routing**, **Twig**, a **Markdown blog** with translations, **SEO** (Open Graph,
@@ -7,43 +7,44 @@ JSON-LD, hreflang, sitemap, feeds) and **Vite + Tailwind CSS**. Requires PHP 8.4
 Everything a request needs is compiled ahead of time into plain PHP files in `var/cache`, which
 Opcache keeps in shared memory: no parsing, no database queries, no file scanning per request.
 
-Starlite is freely inspired by [Craft CMS](https://craftcms.com) (Twig-first templates, content you
+TinyTank is freely inspired by [Craft CMS](https://craftcms.com) (Twig-first templates, content you
 query rather than receive, image transforms) and [Datastar](https://data-star.dev) (hypermedia: the
 server renders HTML, the browser stays light).
 
 **This repository is the site skeleton: start every new site from it.** The framework itself is the
-[`starlite/framework`](https://github.com/lab909/starlite-framework) package, installed by Composer.
+[`tinytank/framework`](https://github.com/tinytankphp/framework) package, installed by Composer.
 
-📖 **Documentation: https://lab909.github.io/starlite-framework-docs/**
+📖 **Documentation: https://tinytank.dev/**
 
 ## Create a site
 
-On GitHub, click **Use this template** to create your site's repository, then:
+On GitHub, click **Use this template** to create your site's repository (or run
+`composer create-project tinytank/tinytank my-site`), then:
 
 ```sh
 git clone git@github.com:you/my-site.git && cd my-site
 cp .env.example .env         # set APP_SECRET (openssl rand -hex 32), APP_URL and APP_DEBUG=1
 ddev start
-ddev composer update         # installs starlite/framework from GitHub
+ddev composer update         # installs tinytank/framework from Packagist
 ddev npm install
 ddev npm run dev             # Vite + Tailwind with hot reload
 ```
 
 Then remove `/composer.lock` from `.gitignore` and commit your lock file. See
-[Installation](https://lab909.github.io/starlite-framework-docs/1.x/getting-started/installation)
+[Installation](https://tinytank.dev/1.x/getting-started/installation)
 for the details and for setups without DDEV.
 
-## Your site, Starlite's framework
+## Your site, TinyTank's framework
 
 Everything in this repository is yours to change: routes in `config/routes.php`, services and
 deploy steps in `config/bootstrap.php`, code in `src/`, templates in `templates/`, posts in
-`content/`. The framework lives in `vendor/starlite/framework` and is never edited; update it with:
+`content/`. The framework lives in `vendor/tinytank/framework` and is never edited; update it with:
 
 ```sh
-ddev composer update starlite/framework
+ddev composer update tinytank/framework
 ```
 
-See [Building a site on Starlite](https://lab909.github.io/starlite-framework-docs/1.x/extending/).
+See [Building a site on TinyTank](https://tinytank.dev/1.x/extending/).
 
 ## Common commands
 
@@ -57,12 +58,19 @@ ddev console cache:clear     # back to development after a deploy
 
 ## Licenses
 
+TinyTank (this skeleton and the framework) is released under the [MIT License](LICENSE),
+Copyright (c) 2026 lab909. **A site you build from it is yours:** replace `LICENSE` with your site's
+own terms (or remove it), and `SECURITY.md` with your own contact. The MIT notice only has to stay
+with copies of TinyTank's code itself, which `vendor/tinytank/framework` carries.
+
 The site's built files include third-party code: the Datastar client (MIT), Lucide icons (ISC/MIT),
 the Inter font (SIL Open Font License) and Tailwind CSS (MIT). They carry short notices, and
 `public/third-party-licenses.txt` has the full texts. If you change fonts, icons or scripts, update
 that file too (`tests/LicensesTest.php` checks it).
 
-## Contributing to Starlite
+## Contributing to TinyTank
 
 Maintainers work on the skeleton, the framework and the docs side by side: see
-[CONTRIBUTING.md](CONTRIBUTING.md). The roadmap is in [ROADMAP.md](ROADMAP.md).
+[CONTRIBUTING.md](CONTRIBUTING.md). The roadmap is in [ROADMAP.md](ROADMAP.md); the framework's
+releases are in its [CHANGELOG](https://github.com/tinytankphp/framework/blob/main/CHANGELOG.md).
+Security problems: see [SECURITY.md](SECURITY.md).

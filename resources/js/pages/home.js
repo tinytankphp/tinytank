@@ -3,13 +3,13 @@
 // here a Web Audio tone. It reads signals inside effect() and writes results back with mergePatch().
 // Signals starting with `_` stay in the browser: Datastar doesn't send them with backend requests.
 import { effect, getPath, mergePatch } from 'datastar';
-import { persist, ready } from 'starlite';
+import { persist, ready } from 'tinytank';
 
 // Wait until Datastar has applied the page's data-signals before touching them.
 await ready;
 
 // The volume survives reloads; whether the tone is playing doesn't.
-persist(['_tone.volume'], { key: 'starlite-demo' });
+persist(['_tone.volume'], { key: 'tinytank-demo' });
 
 const AudioContext = window.AudioContext ?? window.webkitAudioContext;
 if (!AudioContext) {

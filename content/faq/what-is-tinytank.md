@@ -1,5 +1,5 @@
 ---
-question: What is Starlite?
+question: What is TinyTank?
 order: 1
 ---
 A small PHP framework for sites that are mostly content but need some interactivity: Markdown

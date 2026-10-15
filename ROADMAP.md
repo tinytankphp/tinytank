@@ -1,9 +1,9 @@
-# Starlite roadmap
+# TinyTank roadmap
 
-Starlite is a starting point, not a full framework: SEO, Twig, Datastar, a Markdown blog, translations
+TinyTank is a starting point, not a full framework: SEO, Twig, Datastar, a Markdown blog, translations
 and a deploy pipeline, with no database and no admin panel. A new site starts from this **skeleton**
-(lab909/starlite, "Use this template") and installs the framework package (lab909/starlite-framework,
-`starlite/framework`) with Composer; the docs are lab909/starlite-framework-docs. See CONTRIBUTING.md.
+(tinytankphp/tinytank, "Use this template") and installs the framework package (tinytankphp/framework,
+`tinytank/framework`) with Composer; the docs are tinytankphp/docs. See CONTRIBUTING.md.
 
 This roadmap lists what makes such sites easy to build and keep up to date. The first site will be
 **Nocturne**, a calm ambient-sound mixer (claude.ai/design project "Nocturne Mockups"): a blog of
@@ -12,8 +12,8 @@ surfaced most of the generic needs below; Nocturne's own logic stays in its repo
 
 Status: `[ ]` to do · `[~]` in progress · `[x]` done
 
-### Scope: where Starlite stops
-Starlite is for sites whose content is files, edited by people comfortable with Markdown and git.
+### Scope: where TinyTank stops
+TinyTank is for sites whose content is files, edited by people comfortable with Markdown and git.
 Content types stay few and concrete: the **blog** (dated articles), **content pages** (one-offs,
 like Craft singles, nested like a structure) and **data collections** (repeating structured data,
 like Craft channels). No configurable "section types". If a site needs an admin UI for editors, a
@@ -37,7 +37,7 @@ translated posts, pagination, SEO / hreflang, translations, the deploy command.
 - PHPStan (high level); the code is already annotated
 - GitHub Actions: tests + PHPStan + `npm run build` on every push
 
-Why first: Starlite is meant to be reused; tests are what make changing it safe.
+Why first: TinyTank is meant to be reused; tests are what make changing it safe.
 
 Done: 133 tests (framework suite in the package's `tests/`, app suite in the skeleton's `tests/`), each checked by
 deliberately breaking the behaviour it covers; PHPStan level 8 with no errors (level 9's strict
@@ -46,7 +46,7 @@ See README "Testing".
 
 ### [x] Extension points
 A site could add routes and controllers, but some things could only be changed by editing the
-framework, which would have made later Starlite updates conflict-prone:
+framework, which would have made later TinyTank updates conflict-prone:
 
 - **Console commands**: auto-discover commands in `src/Command/` (today `bin/console` lists them by hand)
 - **`config/bootstrap.php`**: a hook that receives the kernel, to register the app's Twig extensions,
@@ -54,24 +54,24 @@ framework, which would have made later Starlite updates conflict-prone:
 - **Deploy steps**: let the app add steps to `bin/console deploy` (e.g. "build audio" before "refresh
   Opcache"), configured rather than hardcoded
 
-Rule of thumb for a site: the framework (`vendor/starlite/framework`) is never edited; everything
+Rule of thumb for a site: the framework (`vendor/tinytank/framework`) is never edited; everything
 app-specific lives in `src/`, `config/`, `templates/`, `resources/`, `content/`, `translations/`.
 
 Done: `src/Command/` auto-discovery (`AppCommand` with a lazily booted kernel), `config/bootstrap.php`,
 a PSR-11 container (`$app->container`, `$this->get()`), named deploy steps (`addDeployStep()`,
-`--skip`, `--list-steps`), and Starlite's Vite logic moved into a framework plugin
-(`resources/vite/starlite.js` in the package) so `vite.config.js` stays app-only. See README "Building a site on Starlite".
+`--skip`, `--list-steps`), and TinyTank's Vite logic moved into a framework plugin
+(`resources/vite/tinytank.js` in the package) so `vite.config.js` stays app-only. See README "Building a site on TinyTank".
 
 ---
 
 ### [x] Separate framework package
-The framework moved out of `lib/` into its own repository (lab909/starlite-framework, with its
+The framework moved out of `lib/` into its own repository (tinytankphp/framework, with its
 history), installed by sites as a Composer VCS package. Maintainers clone it into the gitignored
-`packages/starlite`, which a path repository prefers over GitHub. Framework updates reach sites as
-`composer update starlite/framework` instead of git merges.
+`packages/tinytank`, which a path repository prefers over GitHub. Framework updates reach sites as
+`composer update tinytank/framework` instead of git merges.
 
 ### [x] Documentation site
-VitePress site in its own repository (lab909/starlite-framework-docs), versioned under `/1.x/`:
+VitePress site in its own repository (tinytankphp/docs), versioned under `/1.x/`:
 introduction, getting started, basics, content, features, extending, deployment, testing, security
 and a reference section. Published to GitHub Pages by the docs repository's own workflow.
 Keep it in step with the code: maintainers clone it into the gitignored `docs/` and update it with each change.
@@ -93,7 +93,7 @@ Keep it in step with the code: maintainers clone it into the gitignored `docs/` 
 Done: every `resources/js/pages/*.js` is an entry point (no config change), added by a page with
 `{% set page_scripts = [...] %}`; the Datastar client moved into the framework (alias `'datastar'`,
 one shared instance across bundles); framework helpers `ready`, `persist()` and `publicConfig()`
-(alias `'starlite'`); `public` allowlist in `config/app.php` printed by `{{ public_config() }}`,
+(alias `'tinytank'`); `public` allowlist in `config/app.php` printed by `{{ public_config() }}`,
 refused if a value contains APP_SECRET. Verified: Datastar v1.0.2 has no persistence, and modules
 run before Datastar applies `data-signals` (hence `ready`). Demo: a Web Audio tone on the home page.
 Docs: "JavaScript & Datastar".
@@ -103,8 +103,8 @@ Follow `prefers-color-scheme` with a user override, applied before first paint b
 script (no flash). Colour tokens in Tailwind's `@theme`; `dark:` variant driven by a `data-theme`
 attribute.
 
-Done: `{{ theme_script() }}` first in `<head>` (framework, `Starlite\Theme`, with `Theme::hash()` for
-the CSP); `theme()` in the 'starlite' module (saves the `_theme` signal, follows system changes);
+Done: `{{ theme_script() }}` first in `<head>` (framework, `TinyTank\Theme`, with `Theme::hash()` for
+the CSP); `theme()` in the 'tinytank' module (saves the `_theme` signal, follows system changes);
 colour tokens with `light-dark()` in `resources/css/app.css`, so the system setting works even without
 JavaScript; a radio-group toggle in the header; templates converted to tokens. Also: `cache:clear`
 now rebuilds the normal Composer autoloader after a deploy. Docs: "Dark & light theme".
@@ -131,7 +131,7 @@ framework: it would have to assume the site's Tailwind setup and tokens, change 
    visible focus styles, `prefers-reduced-motion` handling. Done, with `tests/e2e/accessibility.spec.js`
    (mutation-checked) and a docs section in Frontend & Vite.
 2. [ ] **Dialog, toast, slider:** built in Nocturne, where they're needed.
-3. [ ] **If a second project wants them:** extract into an optional package (`starlite/ui`) with the
+3. [ ] **If a second project wants them:** extract into an optional package (`tinytank/ui`) with the
    package convention (`addTemplates()`, overridable components, one line in `bootstrap.php`).
 4. [ ] **Docs:** a "Patterns" page with recipes to copy (native `<dialog>`, a toast with Datastar).
 5. [ ] **Automated accessibility checks:** axe-core (`@axe-core/playwright`) on every sitemap page in
@@ -143,7 +143,7 @@ The main missing security header. Use **hashes** of the few inline scripts inste
 nonces: a nonce would make every response different and break ETags, public caching and the static
 export. Datastar needs `'unsafe-eval'`; the rest stays locked down, with extra hosts from config.
 
-Done: `Starlite\Csp` (`$app->csp`) sends a strict policy on HTML responses: `default-src 'self'`,
+Done: `TinyTank\Csp` (`$app->csp`) sends a strict policy on HTML responses: `default-src 'self'`,
 `script-src 'self' 'unsafe-eval'` + the theme script's hash, `img-src 'self' data:` (icon masks),
 `style-src-attr 'unsafe-inline'` (data-show's `display: none`), `object-src 'none'`, `base-uri`,
 `form-action`, `frame-ancestors 'self'`. Extra sources per directive in `config/app.php`
@@ -169,7 +169,7 @@ tests compile the real content/. Docs: Content → Data collections.
 ### [x] Translated slugs
 A translation can set its own URL segment with `slug:` in its front matter: `content/pages/about/
 index.it.md` with `slug: chi-siamo` is `/it/chi-siamo`, nested pages combine their parents'
-translated slugs (`/it/chi-siamo/riconoscimenti`), posts likewise (`/it/blog/ciao-starlite`). The
+translated slugs (`/it/chi-siamo/riconoscimenti`), posts likewise (`/it/blog/ciao-tinytank`). The
 folder name stays the identity (`path` / `slug`), used by queries and by `path('page', {path: 'about'})`,
 which writes the right URL for each language; items get a `uri` field with their URL in that
 language. The untranslated URL redirects (301) to the translated one; duplicate URLs in a language
@@ -177,7 +177,7 @@ fail loudly, and `deploy` checks translated URLs against the routes too.
 
 Done as described, for pages and posts. `Kernel::path()` localizes the `page` and `blog_post` routes;
 the skeleton's controllers look items up by `uri` and redirect folder paths. Demo: /it/chi-siamo,
-/it/chi-siamo/riconoscimenti, /it/blog/ciao-starlite.
+/it/chi-siamo/riconoscimenti, /it/blog/ciao-tinytank.
 
 ### [x] Content components
 Small reusable pieces inside Markdown (posts, pages, collection bodies), like Hugo shortcodes:
@@ -193,10 +193,10 @@ items keep placeholders and `{{ content(item) }}` renders the components per req
 component fails the build with the file name; code blocks are never touched. Not raw Twig in
 Markdown: that would turn content into code, break code examples and make every post a template.
 Template lookup: the site's `templates/`, then packages (`$app->addTemplates($dir)`), then the
-framework's defaults (`@starlite/…`), so a site can override any component. The feed shows a link
+framework's defaults (`@tinytank/…`), so a site can override any component. The feed shows a link
 to the post in place of a component.
 
-Done: a CommonMark block extension (`Starlite\Content`), items carry `components`, `content(item)` in
+Done: a CommonMark block extension (`TinyTank\Content`), items carry `components`, `content(item)` in
 Twig and PHP, `addTemplates()`, `Kernel::TEMPLATES`; the deploy compiles every template folder.
 Unknown, malformed or misplaced components (in a `markdown` field) fail with the file name; up to
 three spaces of indentation like any block. Demo: `related-posts` at the end of the first post, the
@@ -209,14 +209,14 @@ video host until the visitor clicks (a normal iframe contacts it on page load, e
 youtube-nocookie.com). The player host is allowed in `frame-src` only on pages that show a video.
 
 Done: framework components `_components/youtube.twig` / `vimeo.twig` sharing `_embeds/video.twig`;
-`Starlite\Content\Embeds` validates ids at compile time and downloads posters and titles (deploy step
+`TinyTank\Content\Embeds` validates ids at compile time and downloads posters and titles (deploy step
 `embeds`; lazily once in development; only real images are saved; failures are remembered and
 retried by deploy). Click-to-load with Datastar (the iframe has no src until play), a link without
 JavaScript. New `csp_allow()` for per-response CSP sources, used by `video()`. Verified in Chromium:
 before play only this site is contacted. Demo in the Markdown cheatsheet (Big Buck Bunny, CC BY);
 the Privacy page mentions it.
 
-### [x] Writing a Starlite package (docs)
+### [x] Writing a TinyTank package (docs)
 No plugin system: a Composer package exposes `register(Kernel $app)`, called from the site's
 `config/bootstrap.php`, and adds Twig extensions, services, commands, deploy steps and templates
 (`addTemplates()`, overridable by the site). Revisit only if real packages outgrow the convention.
@@ -239,7 +239,7 @@ what they need. One immutable, chainable query for every content type:
 `blog` and `collections` Twig globals go away: templates get context (`site`, `seo`, `datastar`)
 automatically, content only when they ask. Designed so `posts('news')` can be added later.
 
-Done: `Starlite\Query` (immutable, generic for PHPStan: `posts()` is a `Query<Post>`), returned by
+Done: `TinyTank\Query` (immutable, generic for PHPStan: `posts()` is a `Query<Post>`), returned by
 `posts()` / `collection(name)` in Twig and `$app->posts()` / `$app->collection(name)` in PHP; field
 names are checked (a typo throws). `Blog` and `Collections` are now sources (compile, cache, files):
 their old query methods and the two globals are gone; the skeleton's templates, BlogController,
@@ -253,7 +253,7 @@ nested URLs (`content/pages/about/team/` → `/about/team`). An optional `templa
 matter renders a page with its own Twig template (a contact page: text from Markdown, the form in
 the template, a POST route for it). Queried with `pages()` in the same API.
 
-Done: `Starlite\Pages` compiles `content/pages/<path>/index.md` (+ translations inheriting image,
+Done: `TinyTank\Pages` compiles `content/pages/<path>/index.md` (+ translations inheriting image,
 template, order, updated and `data`; files next to the page at `/media/pages/<path>/`), with
 `path`, `parent`, `depth` for menus and trees, an optional `template:` and a free-form `data:`
 mapping. `pages()` in the query API; the skeleton's `PageController` and a catch-all route with the
@@ -319,18 +319,26 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
       Safari with blocked storage or a sandboxed iframe, merely reading it throws
       Done: the method is signed into Datastar configs (`m`), other methods get a 405, configs from
       before are refused (400); forms are validated after bootstrap (fixture spam check `word`); dates
-      are checked before YAML reads them (`Starlite\Content\StrictYaml`, also for collections, and
+      are checked before YAML reads them (`TinyTank\Content\StrictYaml`, also for collections, and
       always Symfony YAML now); the skeleton's blog page route takes at most 6 digits.
 
-### [ ] 3.2 License and release basics
-- [ ] **License**: no `LICENSE` file or Composer `license` field in the framework or the skeleton yet,
+### [x] 3.2 License and release basics
+- [x] **License**: no `LICENSE` file or Composer `license` field in the framework or the skeleton yet,
       so nobody else may legally use them. Choose (MIT is usual: Symfony, Slim, Datastar)
-- [ ] **First tagged release** (`v0.1.0` or `v1.0.0-beta.1`), `CHANGELOG.md`, upgrade notes when the
+- [x] **First tagged release** (`v0.1.0` or `v1.0.0-beta.1`), `CHANGELOG.md`, upgrade notes when the
       skeleton changes; Packagist optional
-- [ ] **`SECURITY.md`**: private vulnerability reporting (GitHub's is enough)
-- [ ] **Composer `require`**: `ext-intl`, `ext-mbstring`, `ext-xmlwriter` (sitemap, feed); GD or Imagick
+- [x] **`SECURITY.md`**: private vulnerability reporting (GitHub's is enough)
+- [x] **Composer `require`**: `ext-intl`, `ext-mbstring`, `ext-xmlwriter` (sitemap, feed); GD or Imagick
       in `suggest` (Composer can't say "one of") and in `check`
-- [ ] **Dependabot** (Composer, npm, GitHub Actions): weekly advisory and update PRs
+- [x] **Dependabot** (Composer, npm, GitHub Actions): weekly advisory and update PRs
+      Done: MIT, Copyright (c) 2026 lab909, in all three repositories (sites replace the skeleton's
+      `LICENSE` and `SECURITY.md` with their own); `CHANGELOG.md` and `SECURITY.md` in the framework;
+      sites require `^0.1@dev` with `prefer-stable` (latest tag), the skeleton's CI tests against the
+      framework's `main`; `dev-main` aliased `0.1.x-dev`; release steps in CONTRIBUTING.md; docs stay
+      at `/1.x/` ("0.x beta" in the version menu). First tag: `v0.1.0`.
+      **Renamed from Starlite to TinyTank** (a Python framework and a PHP microframework had
+      confusable names): GitHub org `tinytankphp`, Packagist `tinytank/framework` and
+      `tinytank/tinytank` (the skeleton, also for `composer create-project`), namespace `TinyTank\`.
 
 ### [ ] 3.3 Caching boundary
 - [ ] A response with **`Set-Cookie`** (or one marked private by its handler) gets `private, no-store`,
@@ -406,7 +414,7 @@ is synchronous); worker servers.
       - **Later:** ALTCHA (self-hosted proof of work) as an opt-in check; third-party captchas
         (Turnstile, hCaptcha) only as optional packages, loaded on interaction, CSP on that page only.
       - **Not now:** attachments.
-      - Done: `Starlite\Forms` (Form, Forms, Submission, Spam\{Honeypot, Timing, MaxLinks, RateLimit}),
+      - Done: `TinyTank\Forms` (Form, Forms, Submission, Spam\{Honeypot, Timing, MaxLinks, RateLimit}),
         `form:` in page front matter, `form_spam()`, `KernelTestCase::request(parameters:)`; the skeleton's
         Contact page (`/contact`, `/it/contatti`) checked end to end with Mailpit, plus PHPUnit and
         Playwright tests (with and without JavaScript); docs: Features → Forms.
@@ -454,16 +462,16 @@ is synchronous); worker servers.
 
 ---
 
-## 5. For the Nocturne repository (not Starlite)
+## 5. For the Nocturne repository (not TinyTank)
 
-Kept here only as a reminder of what the Nocturne site will add on top of Starlite:
+Kept here only as a reminder of what the Nocturne site will add on top of TinyTank:
 
 - Spike first: background playback with the screen locked (iOS suspends Web Audio; `<audio loop>`
   leaves gaps) and gapless mixing; Media Session API for lock-screen controls. Test on real phones.
 - Audio engine (layers, gains, fades, variant crossfades, previews), mixer UI (1a dense vs. 1b
   spacious), saving / My mixes in `localStorage`, share links
 - `audio:build` command (ffmpeg: loudness normalisation, seamless loops, Opus + AAC, preview clips),
-  registered through Starlite's deploy steps; audio from a CDN via `MEDIA_URL`
+  registered through TinyTank's deploy steps; audio from a CDN via `MEDIA_URL`
 - Sound catalogue as a data collection; one SEO page per sound (`/sounds/rain`); sound credits page
 - Open questions: mixer direction, layers at once, music source and licensing, launch languages,
   analytics, anything server-side
@@ -489,4 +497,4 @@ Kept here only as a reminder of what the Nocturne site will add on top of Starli
 - [ ] Languages for the project (`language`, `languages`) and `translations/*.php`
 - [ ] Production server: `.env` (`APP_URL`, `APP_SECRET`, `APP_OPCACHE`…), see README "Production setups"
 - [ ] Changed fonts, icons or scripts? Update `public/third-party-licenses.txt` and the `/*! … */` notices
-- [ ] Commit the site's own `composer.lock` (remove it from `.gitignore`); update the framework with `composer update starlite/framework`
+- [ ] Commit the site's own `composer.lock` (remove it from `.gitignore`); update the framework with `composer update tinytank/framework`

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Spatie\SchemaOrg\Schema;
-use Starlite\Controller;
+use TinyTank\Controller;
 
 final class HomeController extends Controller
 {

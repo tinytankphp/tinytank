@@ -8,7 +8,7 @@ test('the browser downloads a small modern version of an image, not the original
         }
     });
 
-    await page.goto('/blog/hello-starlite');
+    await page.goto('/blog/hello-tinytank');
     await expect(page.locator('article picture img')).toBeVisible();
 
     expect(images.length).toBeGreaterThan(0);

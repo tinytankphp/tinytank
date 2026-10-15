@@ -10,7 +10,7 @@ namespace App\Tests;
  */
 final class ContactTest extends AppTestCase
 {
-    private const VALID = ['name' => 'Ada', 'email' => 'ada@example.test', 'message' => 'Hello, a question about Starlite.'];
+    private const VALID = ['name' => 'Ada', 'email' => 'ada@example.test', 'message' => 'Hello, a question about TinyTank.'];
 
     /**
      * @param array<string, string> $data

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use Starlite\Theme;
+use TinyTank\Theme;
 
 final class PagesTest extends AppTestCase
 {
@@ -81,8 +81,8 @@ final class PagesTest extends AppTestCase
         self::assertTrue($app->pages()->exists());
         self::assertSame([], $app->shadowedPages(), 'no content page hidden behind a route');
 
-        self::assertMatchesRegularExpression('#What is Starlite\?.*Where does the content live\?.*How fast is it\?#s', self::body($this->request($app, '/')));
-        self::assertMatchesRegularExpression('#Che cos&\#039;è Starlite\?.*Dove si trovano i contenuti\?.*Quanto è veloce\?#s', self::body($this->request($app, '/it')));
+        self::assertMatchesRegularExpression('#What is TinyTank\?.*Where does the content live\?.*How fast is it\?#s', self::body($this->request($app, '/')));
+        self::assertMatchesRegularExpression('#Che cos&\#039;è TinyTank\?.*Dove si trovano i contenuti\?.*Quanto è veloce\?#s', self::body($this->request($app, '/it')));
     }
 
     public function testContentPagesWithTheirTemplatesAndTheFooterMenu(): void
@@ -90,7 +90,7 @@ final class PagesTest extends AppTestCase
         $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
 
         $about = self::body($this->request($app, '/about'));
-        self::assertStringContainsString('<title>About · Starlite</title>', $about);
+        self::assertStringContainsString('<title>About · TinyTank</title>', $about);
         self::assertStringContainsString('href="/about/credits"', $about, 'pages/about.twig lists the child pages');
         self::assertMatchesRegularExpression('#<footer.*href="/about".*href="/privacy".*</footer>#s', $about, 'menu in `order`');
 
@@ -101,8 +101,8 @@ final class PagesTest extends AppTestCase
         self::assertStringContainsString('<link rel="alternate" hreflang="en" href="https://example.test/about/credits">', $credits);
         $moved = $this->request($app, '/it/about/credits');
         self::assertSame([301, '/it/chi-siamo/riconoscimenti'], [$moved->getStatusCode(), $moved->headers->get('Location')]);
-        $post = $this->request($app, '/it/blog/hello-starlite');
-        self::assertSame([301, '/it/blog/ciao-starlite'], [$post->getStatusCode(), $post->headers->get('Location')]);
+        $post = $this->request($app, '/it/blog/hello-tinytank');
+        self::assertSame([301, '/it/blog/ciao-tinytank'], [$post->getStatusCode(), $post->headers->get('Location')]);
 
         $missing = $this->request($app, '/nope');
         self::assertSame(404, $missing->getStatusCode());
@@ -115,9 +115,9 @@ final class PagesTest extends AppTestCase
         $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
 
         // ::related-posts{limit=2} at the end of the post: templates/_components/related-posts.twig.
-        $post = self::body($this->request($app, '/blog/hello-starlite'));
+        $post = self::body($this->request($app, '/blog/hello-tinytank'));
         self::assertMatchesRegularExpression('#<h2[^>]*>Related posts</h2>.*href="/blog/markdown-cheatsheet"#s', $post);
-        self::assertStringNotContainsString('href="/blog/hello-starlite" class="hover:underline"', $post, 'not the post itself');
+        self::assertStringNotContainsString('href="/blog/hello-tinytank" class="hover:underline"', $post, 'not the post itself');
 
         // The cheatsheet shows the syntax in a code block: text, not a component.
         $cheatsheet = $this->request($app, '/blog/markdown-cheatsheet');
@@ -126,17 +126,17 @@ final class PagesTest extends AppTestCase
         // ::youtube, a framework default component: click-to-load, the player allowed on this page only.
         self::assertStringContainsString('data-src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ', self::body($cheatsheet));
         self::assertStringContainsString('frame-src', (string) $cheatsheet->headers->get('Content-Security-Policy'));
-        self::assertStringNotContainsString('frame-src', (string) $this->request($app, '/blog/hello-starlite')->headers->get('Content-Security-Policy'));
+        self::assertStringNotContainsString('frame-src', (string) $this->request($app, '/blog/hello-tinytank')->headers->get('Content-Security-Policy'));
     }
 
     public function testPostImagesAreResponsive(): void
     {
         $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
-        $html = self::body($this->request($app, '/blog/hello-starlite'));
+        $html = self::body($this->request($app, '/blog/hello-tinytank'));
 
         // The cover through image(): modern versions at several widths, the original's size, not lazy.
-        self::assertStringContainsString('<source type="image/webp" srcset="/media/blog/hello-starlite/cover.png.480w.webp 480w, /media/blog/hello-starlite/cover.png.960w.webp 960w, /media/blog/hello-starlite/cover.png.1200w.webp 1200w"', $html);
-        self::assertStringContainsString('<img src="/media/blog/hello-starlite/cover.png" alt="" width="1200" height="630" loading="eager" decoding="async" fetchpriority="high"', $html);
+        self::assertStringContainsString('<source type="image/webp" srcset="/media/blog/hello-tinytank/cover.png.480w.webp 480w, /media/blog/hello-tinytank/cover.png.960w.webp 960w, /media/blog/hello-tinytank/cover.png.1200w.webp 1200w"', $html);
+        self::assertStringContainsString('<img src="/media/blog/hello-tinytank/cover.png" alt="" width="1200" height="630" loading="eager" decoding="async" fetchpriority="high"', $html);
         if (in_array('avif', $app->images->formats, true)) {
             self::assertStringContainsString('<source type="image/avif"', $html);
         }

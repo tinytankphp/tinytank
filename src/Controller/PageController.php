@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Starlite\Controller;
-use Starlite\Forms\Submission;
-use Starlite\Pages\PageSeo;
+use TinyTank\Controller;
+use TinyTank\Forms\Submission;
+use TinyTank\Pages\PageSeo;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

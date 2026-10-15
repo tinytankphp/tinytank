@@ -1,4 +1,4 @@
-name: starlite-framework
+name: tinytank
 type: php
 docroot: public
 php_version: "8.4"
@@ -14,16 +14,16 @@ composer_version: "2"
 # Development email: Mailpit catches every message (see `ddev mailpit`); nothing is really sent.
 web_environment:
     - MAILER_DSN=smtp://127.0.0.1:1025
-    - MAILER_FROM=site@starlite-framework.ddev.site
+    - MAILER_FROM=site@tinytank.ddev.site
     - CONTACT_TO=you@example.test
 nodejs_version: "24"
-# Vite dev server (npm run dev) at https://starlite-framework.ddev.site:5173
+# Vite dev server (npm run dev) at https://tinytank.ddev.site:5173
 web_extra_exposed_ports:
     - name: vite
       container_port: 5173
       http_port: 5172
       https_port: 5173
-    # Documentation (cd docs && npm run dev) at https://starlite-framework.ddev.site:5174
+    # Documentation (cd docs && npm run dev) at https://tinytank.ddev.site:5174
     - name: docs
       container_port: 5174
       http_port: 5175

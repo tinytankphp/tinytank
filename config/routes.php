@@ -6,14 +6,14 @@ use App\Controller\BlogController;
 use App\Controller\ClockController;
 use App\Controller\HomeController;
 use App\Controller\PageController;
-use Starlite\Blog\AssetController;
-use Starlite\Blog\Blog;
-use Starlite\Blog\FeedController;
-use Starlite\Kernel;
-use Starlite\Pages\AssetController as PageAssetController;
-use Starlite\Pages\Pages;
-use Starlite\Seo\RobotsController;
-use Starlite\Seo\SitemapController;
+use TinyTank\Blog\AssetController;
+use TinyTank\Blog\Blog;
+use TinyTank\Blog\FeedController;
+use TinyTank\Kernel;
+use TinyTank\Pages\AssetController as PageAssetController;
+use TinyTank\Pages\Pages;
+use TinyTank\Seo\RobotsController;
+use TinyTank\Seo\SitemapController;
 
 // Handlers: [Controller::class, 'method'], an invokable Controller::class, or a closure.
 return static function (Kernel $app): void {
@@ -38,6 +38,6 @@ return static function (Kernel $app): void {
     $app->get(Pages::ASSET_URL . '/{file}', PageAssetController::class, 'page_asset', ['file' => '.+']);
     // POST too, for pages with a form (`form:` in their front matter), like the contact page.
     $app->route(['GET', 'POST'], '/{path}', [PageController::class, 'show'], 'page', ['path' => Pages::PATH], priority: -1);
-    // Link to a page by its folder path, `path('page', {path: 'about'})`: Starlite writes each
+    // Link to a page by its folder path, `path('page', {path: 'about'})`: TinyTank writes each
     // language's URL, translated slugs included.
 };

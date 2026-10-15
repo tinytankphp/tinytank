@@ -1,6 +1,6 @@
 ---
 title: A draft post
-tags: [starlite]
+tags: [tinytank]
 ---
 
 Drafts live in `content/blog/drafts/<slug>/`. They show up while `APP_DEBUG=1`, are left out of

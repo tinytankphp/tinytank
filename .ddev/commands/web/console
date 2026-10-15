@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Description: Run the Starlite console (e.g. `ddev console deploy`)
+## Description: Run the TinyTank console (e.g. `ddev console deploy`)
 ## Usage: console [command] [options]
 ## Example: "ddev console deploy" "ddev console cache:clear"
 

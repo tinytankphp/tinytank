@@ -10,7 +10,7 @@ final class BlogPagesTest extends AppTestCase
     {
         $html = self::body($this->request($this->app(), '/blog'));
 
-        self::assertStringContainsString('<title>Blog · Starlite</title>', $html);
+        self::assertStringContainsString('<title>Blog · TinyTank</title>', $html);
         self::assertStringContainsString('href="/blog/first"', $html);
         self::assertStringNotContainsString('href="/blog/second"', $html);
         self::assertStringContainsString('rel="next" href="/blog/page/2"', $html);
@@ -23,7 +23,7 @@ final class BlogPagesTest extends AppTestCase
     {
         $html = self::body($this->request($this->app(), '/blog/page/2'));
 
-        self::assertStringContainsString('<title>Blog · Page 2 · Starlite</title>', $html);
+        self::assertStringContainsString('<title>Blog · Page 2 · TinyTank</title>', $html);
         self::assertStringContainsString('<link rel="canonical" href="https://example.test/blog/page/2">', $html);
         self::assertStringContainsString('href="/blog/second"', $html);
         self::assertStringContainsString('rel="prev" href="/blog"', $html);
@@ -86,7 +86,7 @@ final class BlogPagesTest extends AppTestCase
     {
         $html = self::body($this->request($this->app(), '/it/blog/first'));
 
-        self::assertStringContainsString('<title>Primo articolo · Starlite</title>', $html);
+        self::assertStringContainsString('<title>Primo articolo · TinyTank</title>', $html);
         self::assertStringContainsString('hreflang="en" href="https://example.test/blog/first"', $html);
         self::assertStringContainsString('hreflang="it" href="https://example.test/it/blog/first"', $html);
         self::assertStringContainsString('<meta property="article:tag" content="news">', $html, 'tags inherited from index.md');

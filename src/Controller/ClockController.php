@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Starlite\Controller;
+use TinyTank\Controller;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /** Custom Datastar action: do any PHP work here, then stream a template back. */

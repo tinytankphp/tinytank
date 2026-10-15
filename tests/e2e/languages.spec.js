@@ -18,7 +18,7 @@ test('an untranslated URL redirects to the translated one', async ({ page }) => 
 
 test('links in the Italian blog use the Italian slugs', async ({ page }) => {
     await page.goto('/it/blog');
-    await page.getByRole('link', { name: 'Ciao, Starlite' }).click();
+    await page.getByRole('link', { name: 'Ciao, TinyTank' }).click();
 
-    await expect(page).toHaveURL(/\/it\/blog\/ciao-starlite$/);
+    await expect(page).toHaveURL(/\/it\/blog\/ciao-tinytank$/);
 });

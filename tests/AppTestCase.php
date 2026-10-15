@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use Starlite\Kernel;
-use Starlite\Testing\KernelTestCase;
+use TinyTank\Kernel;
+use TinyTank\Testing\KernelTestCase;
 
 /**
  * Boots this site (its config/, controllers and templates) with the fixture content in

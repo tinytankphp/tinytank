@@ -26,10 +26,12 @@ jobs:
           node-version: '24'
           cache: npm
 
-      # No lock file in the skeleton: this resolves the latest starlite/framework from GitHub,
-      # so the skeleton is always tested against the current framework.
-      - name: Install PHP dependencies
-        run: composer update --no-interaction --no-progress --prefer-dist
+      # No lock file in the skeleton. Sites get the latest tagged framework (^0.1@dev, prefer-stable);
+      # the skeleton itself is tested against the framework's main branch, where its next changes are.
+      - name: Install PHP dependencies (framework main)
+        run: |
+          composer config prefer-stable false
+          composer update --no-interaction --no-progress --prefer-dist
 
       - name: Install JS dependencies
         run: npm ci

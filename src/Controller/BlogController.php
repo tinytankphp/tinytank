@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Spatie\SchemaOrg\Schema;
-use Starlite\Blog\PostSeo;
-use Starlite\Controller;
+use TinyTank\Blog\PostSeo;
+use TinyTank\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -1,10 +1,10 @@
 ---
-title: Ciao, Starlite
-slug: ciao-starlite
+title: Ciao, TinyTank
+slug: ciao-tinytank
 summary: Un micro framework senza database che serve pagine dinamiche alla velocità di un sito statico.
 ---
 
-Starlite è un piccolo framework PHP pensato per siti *perlopiù statici* che hanno comunque
+TinyTank è un piccolo framework PHP pensato per siti *perlopiù statici* che hanno comunque
 bisogno di un po' di interattività lato server.
 
 ## Cosa contiene

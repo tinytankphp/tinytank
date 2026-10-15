@@ -29,6 +29,6 @@ test('blog search and tags filter the posts', async ({ page }) => {
     await expect(page.locator('#blog-posts article')).toHaveCount(1);
 
     await page.getByPlaceholder('Search posts…').fill('');
-    await page.locator('button', { hasText: 'starlite' }).click();
+    await page.locator('button', { hasText: 'tinytank' }).click();
     await expect(page.locator('#blog-posts article')).toHaveCount(1);
 });
