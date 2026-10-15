@@ -63,7 +63,9 @@ latest tag. The skeleton's CI tests against the framework's `main` branch instea
 3. A new minor version: update `extra.branch-alias` (`"dev-main": "0.2.x-dev"`) in the framework's
    `composer.json`, the constraint in the skeleton's `composer.json` (`^0.2@dev`) and the docs
    (Updating TinyTank).
-4. Push the framework with its tag first (`git push --follow-tags`), then the skeleton, then the docs.
+4. Push the framework with its tag first (`git push --follow-tags`). **Wait until Packagist shows the
+   new commit** (packagist.org/packages/tinytank/framework), then push the skeleton, then the docs:
+   the skeleton's CI installs the framework from Packagist, and would test the previous version.
    Optionally, tag the skeleton with the same version, and create a GitHub release from the
    changelog entry.
 

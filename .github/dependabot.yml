@@ -1,10 +1,7 @@
-# Weekly pull requests for dependency updates and security advisories.
+# Weekly pull requests for dependency updates and security advisories. No Composer here: the
+# skeleton has no lock file, and the framework repository keeps the PHP dependencies up to date.
 version: 2
 updates:
-  - package-ecosystem: composer
-    directory: /
-    schedule:
-      interval: weekly
   - package-ecosystem: npm
     directory: /
     schedule:
