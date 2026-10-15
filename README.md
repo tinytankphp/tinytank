@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://tinytank.dev/"><img src="https://docs.tinytank.dev/logo-full.svg" alt="TinyTank" width="240"></a>
+</p>
+
 # TinyTank
 
 A tiny, database-free PHP micro framework for static-like dynamic sites: **Datastar** for
