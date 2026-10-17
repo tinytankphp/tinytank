@@ -475,6 +475,8 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       and nginx block, local only)
 - [ ] Hidden **style guide** page with every content element, for the designer: needs `noindex` and
       `sitemap: false` for content pages (batch 3.5, pulled forward)
+- [x] **Syntax highlighting** for code blocks, at compile time (tempest/highlight), asked for while
+      listing the content elements for the designer; styles in the skeleton's `app.css`
 - [ ] Projects list (a data collection), pages, design
 - [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
 - [ ] Release the fixes found here as 0.1.x

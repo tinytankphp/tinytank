@@ -112,3 +112,33 @@
 :is(h1, h2, h3, h4, h5, h6):hover > .heading-permalink {
     @apply opacity-60;
 }
+
+/*
+ * Code blocks: TinyTank highlights ```php, ```twig… blocks when content compiles, with hl-* classes
+ * (no JavaScript). Colours for the dark code background in both themes, each at least 6:1 contrast.
+ * The language is shown in the corner, from <pre data-lang="php">.
+ */
+.prose pre[data-lang] {
+    position: relative;
+}
+
+.prose pre[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 0.4rem;
+    right: 0.75rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #a8a29e;
+}
+
+.hl-keyword { color: #ff7b72; }
+.hl-property, .hl-generic { color: #d2a8ff; }
+.hl-value, .hl-literal { color: #a5d6ff; }
+.hl-type, .hl-number { color: #79c0ff; }
+.hl-variable { color: #ffa657; }
+.hl-attribute, .hl-addition { color: #7ee787; }
+.hl-deletion { color: #ffa198; }
+.hl-comment { color: #a8a29e; font-style: italic; }
+.hl-operator, .hl-injection { color: inherit; }
