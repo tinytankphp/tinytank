@@ -462,21 +462,35 @@ is synchronous); worker servers.
 
 ---
 
-## 5. The TinyTank website: the first field test
+## 5. The lab909 site: the first field test
 
-`tinytank.dev`, built with TinyTank by creating a site the way users will
-(`composer create-project tinytank/tinytank`, framework from Packagist at `v0.1.0`), in its own
-repository. The docs move to `docs.tinytank.dev` (VitePress). It's both the project's landing page and
-the first real site: every friction point (install, docs gaps, missing hooks, deploy on a real host)
-is written down and fixed in the framework, and released as 0.1.x.
+[lab909.dev](https://lab909.dev) (`lab909.io` redirects to it), the website of lab909, listing its
+projects (open source and paid). The first real TinyTank site, built in this workspace in
+`sites/lab909` (its own private repository, lab909/lab909-website), so framework fixes and missing
+features can be handled as they come up. Created the way users will: `composer create-project
+tinytank/tinytank`, framework v0.1.0 from Packagist. (A separate TinyTank website was dropped: the
+docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirects there.)
 
-- [ ] Hosting with PHP 8.4 (TinyTank needs a PHP origin; GitHub Pages can't run it), HTTPS, deploy
-      with `bin/console deploy`; possibly a CDN in front (CDN caching, `cdn:purge`)
-- [ ] Content: what TinyTank is and who it's for, features (privacy first), a short code example, the
-      quick start, when to choose something else, links to the docs and GitHub
-- [ ] English first; another language to exercise translated slugs, if wanted
-- [ ] A friction log, turned into framework issues and fixes
-- [ ] Until it's live: `tinytank.dev` redirects to `docs.tinytank.dev` (at the DNS provider)
+- [x] Create the site, its identity, `.env`, git; local at https://lab909.ddev.site (DDEV hostname
+      and nginx block, local only)
+- [ ] Hidden **style guide** page with every content element, for the designer: needs `noindex` and
+      `sitemap: false` for content pages (batch 3.5, pulled forward)
+- [ ] Projects list (a data collection), pages, design
+- [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
+- [ ] Release the fixes found here as 0.1.x
+
+**Friction log** (fix in TinyTank, then tick):
+- [ ] `create-project` gives the site the template's identity: `composer.json` name `tinytank/tinytank`,
+      description and MIT license; `package.json` name `tinytank`; TinyTank's `LICENSE` and
+      `SECURITY.md`; the maintainer files `ROADMAP.md` and `CONTRIBUTING.md`. Fix: a
+      `post-create-project-cmd` that resets the identity, removes maintainer files, copies `.env.example`
+      to `.env` with a fresh `APP_SECRET`, and drops `/composer.lock` from `.gitignore`
+- [ ] The DDEV project is named `tinytank` in every site (collisions); its config also exposes the
+      docs port (maintainers only). Fix: the post-create script names it after the folder, drops the
+      docs port
+- [ ] Demo content to remove by hand (Datastar demos, posts, draft, FAQ, sample pages): document the
+      list for site owners (it's in this roadmap's "Housekeeping", which sites no longer get), or a
+      command that removes it
 
 ---
 
@@ -504,7 +518,7 @@ Kept here only as a reminder of what the Nocturne site will add on top of TinyTa
 3. ~~Data collections, content query API, content pages, media embeds, helpers, frontend tests~~,
    UI building blocks, PWA
 4. Stabilization (section 3), in its batch order, as the field tests show what matters
-5. The TinyTank website (section 5): the first field test
+5. The lab909 site (section 5): the first field test
 6. Create the Nocturne site from the skeleton; section 4 items as projects need them
 
 ---

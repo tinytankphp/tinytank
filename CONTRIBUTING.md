@@ -29,6 +29,9 @@ Packagist. When `packages/tinytank` exists, Composer uses it and symlinks it int
 
 Because the source differs, `composer.lock` is never committed in the skeleton.
 
+Real sites built alongside TinyTank, to field-test it, can live in `sites/<name>/` (also gitignored),
+each its own repository created with `composer create-project tinytank/tinytank sites/<name>`.
+
 Each clone is its own git repository: commit and push framework changes from `packages/tinytank`,
 docs changes from `docs/`, and skeleton changes from the root.
 

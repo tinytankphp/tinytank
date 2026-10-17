@@ -23,6 +23,8 @@
 /packages/*
 !/packages/.gitkeep
 /docs/
+# Sites built alongside TinyTank, each its own repository (field tests): see CONTRIBUTING.md.
+/sites/
 
 # A new site commits its own lock file: remove this line after creating your site from the skeleton.
 /composer.lock
