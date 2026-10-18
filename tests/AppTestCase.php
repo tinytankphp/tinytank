@@ -26,10 +26,17 @@ abstract class AppTestCase extends KernelTestCase
         ], $overrides));
     }
 
-    /** The Datastar URL in the first `@get(...)` on a page whose signed config renders $template. */
-    protected function datastarUrl(string $html, string $template): string
+    /**
+     * The URL of the first Datastar action on a page (`@get(...)`, `@post(...)`…) whose signed config
+     * renders $template; with $method, only actions of that method. Request it with the same method:
+     *
+     *   $url = $this->datastarUrl($html, '_partials/count', 'post');
+     *   $this->request($app, $url, 'POST', ['Sec-Fetch-Site' => 'same-origin'], '{"count":1}');
+     */
+    protected function datastarUrl(string $html, string $template, ?string $method = null): string
     {
-        preg_match_all('#@get\(&quot;([^&]+(?:&amp;[^&]+)*)&quot;\)#', $html, $matches);
+        $methods = $method !== null ? preg_quote(strtolower($method), '#') : 'get|post|put|patch|delete';
+        preg_match_all('#@(?:' . $methods . ')\(&quot;([^&]+(?:&amp;[^&]+)*)&quot;\)#', $html, $matches);
         foreach ($matches[1] as $url) {
             $url = html_entity_decode($url);
             parse_str((string) parse_url($url, PHP_URL_QUERY), $query);

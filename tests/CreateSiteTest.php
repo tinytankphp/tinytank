@@ -50,6 +50,7 @@ final class CreateSiteTest extends KernelTestCase
             self::assertFileDoesNotExist("{$site}/{$removed}");
         }
         self::assertFileExists("{$site}/content/pages/style-guide/index.md", 'starter content stays: the checklist decides');
+        self::assertFileExists("{$site}/AGENTS.md", 'instructions for coding agents stay with the site');
     }
 
     public function testAnExistingEnvIsKept(): void
@@ -65,7 +66,8 @@ final class CreateSiteTest extends KernelTestCase
     private function skeletonCopy(): string
     {
         $root = dirname(__DIR__);
-        exec('git -C ' . escapeshellarg($root) . ' ls-files -z 2>/dev/null', $lines, $code);
+        // Tracked files plus new ones not ignored yet (what the next commit would contain).
+        exec('git -C ' . escapeshellarg($root) . ' ls-files -z --cached --others --exclude-standard 2>/dev/null', $lines, $code);
         if ($code !== 0 || $lines === []) {
             self::markTestSkipped('Needs the skeleton as a git checkout.');
         }
@@ -76,12 +78,6 @@ final class CreateSiteTest extends KernelTestCase
             }
             @mkdir(dirname("{$site}/{$file}"), 0777, true);
             copy("{$root}/{$file}", "{$site}/{$file}");
-        }
-        // The script and its test aren't committed yet while they're being written.
-        foreach (['bin/create-site.php', 'tests/CreateSiteTest.php'] as $file) {
-            if (!is_file("{$site}/{$file}")) {
-                copy("{$root}/{$file}", "{$site}/{$file}");
-            }
         }
 
         return $site;

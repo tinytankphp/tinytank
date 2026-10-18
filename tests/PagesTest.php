@@ -49,6 +49,17 @@ final class PagesTest extends AppTestCase
         self::assertSame(403, $this->request($app, '/clock', 'POST', ['Sec-Fetch-Site' => 'cross-site'])->getStatusCode());
     }
 
+    public function testTheLikeButtonIsAPostAction(): void
+    {
+        $app = $this->app();
+        $url = $this->datastarUrl(self::body($this->request($app, '/')), '_partials/like', 'post');
+
+        $response = $this->request($app, $url, 'POST', ['Sec-Fetch-Site' => 'same-origin'], '{}');
+        self::assertStringStartsWith('text/event-stream', (string) $response->headers->get('Content-Type'));
+        self::assertStringContainsString('Mango', self::body($response));
+        self::assertSame(405, $this->request($app, $url)->getStatusCode(), 'the signed method only');
+    }
+
     public function testLanguageSwitcherInTheNavigation(): void
     {
         $html = self::body($this->request($this->app(), '/blog'));
