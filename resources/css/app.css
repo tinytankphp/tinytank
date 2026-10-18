@@ -120,6 +120,7 @@
  */
 .prose pre[data-lang] {
     position: relative;
+    padding-top: 2rem; /* room for the label, also above long lines that scroll */
 }
 
 .prose pre[data-lang]::before {

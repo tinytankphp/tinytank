@@ -476,7 +476,8 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       and nginx block, local only)
 - [x] **Unlisted content pages** (`unlisted: true`: noindex, not in the sitemap, skipped by menus),
       instead of separate `noindex` and `sitemap: false` switches (batch 3.5, pulled forward)
-- [ ] Hidden **style guide** page with every content element, for the designer
+- [x] Hidden **style guide** page with every content element, for the designer (`/style-guide`,
+      unlisted): it found the image bug below on its first render
 - [x] **Syntax highlighting** for code blocks, at compile time (tempest/highlight), asked for while
       listing the content elements for the designer; styles in the skeleton's `app.css`
 - [ ] Projects list (a data collection), pages, design
@@ -492,9 +493,17 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 - [ ] The DDEV project is named `tinytank` in every site (collisions); its config also exposes the
       docs port (maintainers only). Fix: the post-create script names it after the folder, drops the
       docs port
-- [ ] Demo content to remove by hand (Datastar demos, posts, draft, FAQ, sample pages): document the
-      list for site owners (it's in this roadmap's "Housekeeping", which sites no longer get), or a
-      command that removes it
+- [x] **Bug:** a Markdown image that isn't a photo of the folder (`/favicon.svg`, a URL, an SVG in
+      the folder) crashed the page: TinyTank's image renderer never passed CommonMark's configuration
+      to its fallback. Fixed with a regression test (0.1.2)
+- [x] Working on the framework from a site (`packages/tinytank` symlink) swaps `vendor/tinytank/framework`
+      from a folder to a symlink: PHP-FPM workers keep serving the old classes until a reload
+      (`ddev restart`, or `kill -USR2` of the FPM master). Documented in CONTRIBUTING
+- [x] Code block labels overlapped long lines that scroll: room above the code (skeleton CSS)
+- [~] Demo content to remove by hand (Datastar demos, posts, draft, FAQ, sample pages): now listed in
+      the docs (Installation → Starter content); a command that removes it is still an option
+- [x] The style guide joined the skeleton (`content/pages/style-guide/`), with a PHPUnit and a browser
+      test: with the image bug reintroduced, both suites fail, so it would have been caught before 0.1.0
 
 ---
 

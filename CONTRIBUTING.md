@@ -31,6 +31,11 @@ Because the source differs, `composer.lock` is never committed in the skeleton.
 
 Real sites built alongside TinyTank, to field-test it, can live in `sites/<name>/` (also gitignored),
 each its own repository created with `composer create-project tinytank/tinytank sites/<name>`.
+To try a framework change in such a site before it's released, link the clone into the site
+(`ln -s ../../../packages/tinytank sites/<name>/packages/tinytank`, then `composer update
+tinytank/framework` there), and don't commit the site's `composer.lock` while it points at the
+clone. After switching `vendor/tinytank/framework` between a folder and a symlink, reload PHP-FPM
+(`ddev restart`), or its workers keep serving the old classes for a while.
 
 Each clone is its own git repository: commit and push framework changes from `packages/tinytank`,
 docs changes from `docs/`, and skeleton changes from the root.

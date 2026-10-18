@@ -20,6 +20,24 @@ final class PagesTest extends AppTestCase
         self::assertStringContainsString('Demo Datastar', self::body($this->request($app, '/it')));
     }
 
+    public function testTheStyleGuideShowsEveryElementButStaysUnlisted(): void
+    {
+        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $html = self::body($response = $this->request($app, '/style-guide'));
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringContainsString('<meta name="robots" content="noindex">', $html);
+        foreach (['<h6>', '<del>', '<blockquote>', 'type="checkbox"', '<table>', '<hr />', '<picture>', '<img src="/favicon.svg"', 'class="hl-keyword"', 'data-signals="{ _video_youtube_'] as $element) {
+            self::assertStringContainsString($element, $html, $element);
+        }
+        foreach (['php', 'twig', 'html', 'css', 'js', 'json', 'yaml', 'bash', 'diff'] as $language) {
+            self::assertStringContainsString("<pre data-lang=\"{$language}\">", $html, $language);
+        }
+
+        self::assertStringNotContainsString('style-guide', self::body($this->request($app, '/sitemap.xml')));
+        self::assertStringNotContainsString('href="/style-guide"', self::body($this->request($app, '/')), 'not in the menu');
+    }
+
     public function testClockActionStreamsTheServerTime(): void
     {
         $app = $this->app();
