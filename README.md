@@ -22,21 +22,21 @@ server renders HTML, the browser stays light).
 
 ## Create a site
 
-On GitHub, click **Use this template** to create your site's repository (or run
-`composer create-project tinytank/tinytank my-site`), then:
-
 ```sh
-git clone git@github.com:you/my-site.git && cd my-site
-cp .env.example .env         # set APP_SECRET (openssl rand -hex 32), APP_URL and APP_DEBUG=1
+composer create-project tinytank/tinytank my-site
+cd my-site && git init
 ddev start
-ddev composer update         # installs tinytank/framework from Packagist
-ddev npm install
-ddev npm run dev             # Vite + Tailwind with hot reload
+ddev npm install && ddev npm run dev     # https://my-site.ddev.site, with hot reload
 ```
 
-Then remove `/composer.lock` from `.gitignore` and commit your lock file. See
-[Installation](https://docs.tinytank.dev/1.x/getting-started/installation)
-for the details and for setups without DDEV.
+`create-project` prepares the site for you: its own name, `.env` with a fresh secret, a tracked
+`composer.lock`, CI on that lock file. (With GitHub's **Use this template** button instead: clone
+your new repository and run `php bin/create-site.php` once.)
+
+Then work through the [Starting a site](https://docs.tinytank.dev/1.x/getting-started/checklist)
+checklist: your site's identity, the starter content (including the style guide at `/style-guide`),
+contact and privacy. [Installation](https://docs.tinytank.dev/1.x/getting-started/installation)
+covers the details and setups without DDEV.
 
 ## Your site, TinyTank's framework
 

@@ -41,6 +41,10 @@
         "deploy": "@php bin/console deploy",
         "cache:clear": "@php bin/console cache:clear",
         "test": "phpunit",
-        "analyse": "phpstan analyse --memory-limit=1G"
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "post-create-project-cmd": [
+            "@php bin/create-site.php",
+            "@composer update --lock --no-interaction --quiet"
+        ]
     }
 }

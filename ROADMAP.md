@@ -485,14 +485,16 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 - [ ] Release the fixes found here as 0.1.x
 
 **Friction log** (fix in TinyTank, then tick):
-- [ ] `create-project` gives the site the template's identity: `composer.json` name `tinytank/tinytank`,
+- [x] `create-project` gives the site the template's identity: `composer.json` name `tinytank/tinytank`,
       description and MIT license; `package.json` name `tinytank`; TinyTank's `LICENSE` and
       `SECURITY.md`; the maintainer files `ROADMAP.md` and `CONTRIBUTING.md`. Fix: a
       `post-create-project-cmd` that resets the identity, removes maintainer files, copies `.env.example`
-      to `.env` with a fresh `APP_SECRET`, and drops `/composer.lock` from `.gitignore`
-- [ ] The DDEV project is named `tinytank` in every site (collisions); its config also exposes the
+      to `.env` with a fresh `APP_SECRET`, and drops `/composer.lock` from `.gitignore`. Done:
+      `bin/create-site.php` (also points CI at the lock file, adds Composer to Dependabot, writes the
+      site's README), tested on a copy and with a real `create-project`
+- [x] The DDEV project is named `tinytank` in every site (collisions); its config also exposes the
       docs port (maintainers only). Fix: the post-create script names it after the folder, drops the
-      docs port
+      docs port. Done, in the same script
 - [x] **Bug:** a Markdown image that isn't a photo of the folder (`/favicon.svg`, a URL, an SVG in
       the folder) crashed the page: TinyTank's image renderer never passed CommonMark's configuration
       to its fallback. Fixed with a regression test (0.1.2)
@@ -500,8 +502,9 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       from a folder to a symlink: PHP-FPM workers keep serving the old classes until a reload
       (`ddev restart`, or `kill -USR2` of the FPM master). Documented in CONTRIBUTING
 - [x] Code block labels overlapped long lines that scroll: room above the code (skeleton CSS)
-- [~] Demo content to remove by hand (Datastar demos, posts, draft, FAQ, sample pages): now listed in
-      the docs (Installation → Starter content); a command that removes it is still an option
+- [x] Demo content to remove by hand: listed, with the other first decisions, in the docs' new
+      **Starting a site** checklist (identity, starter content and the style guide, contact and privacy,
+      licenses), linked from the README and the script's output
 - [x] The style guide joined the skeleton (`content/pages/style-guide/`), with a PHPUnit and a browser
       test: with the image bug reintroduced, both suites fail, so it would have been caught before 0.1.0
 
@@ -538,9 +541,5 @@ Kept here only as a reminder of what the Nocturne site will add on top of TinyTa
 
 ## Housekeeping when starting a site
 
-- [ ] Replace the Datastar demo page and the sample blog posts
-- [ ] Real site name, description, default share image, author (`config/app.php`)
-- [ ] Languages for the project (`language`, `languages`) and `translations/*.php`
-- [ ] Production server: `.env` (`APP_URL`, `APP_SECRET`, `APP_OPCACHE`…), see README "Production setups"
-- [ ] Changed fonts, icons or scripts? Update `public/third-party-licenses.txt` and the `/*! … */` notices
-- [ ] Commit the site's own `composer.lock` (remove it from `.gitignore`); update the framework with `composer update tinytank/framework`
+Moved to the docs: [Starting a site](https://docs.tinytank.dev/1.x/getting-started/checklist), and
+`bin/create-site.php` does the mechanical part after `composer create-project`.
