@@ -370,8 +370,9 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 
 ### [ ] 3.5 Small site features and docs
 - [ ] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy
-- [ ] **`noindex` / `sitemap: false`** in page front matter, and a route option to stay out of the
-      sitemap (every parameterless GET route is listed today: a `/healthz` or `/thanks` would be too)
+- [~] ~~**`noindex` / `sitemap: false`** in page front matter~~: done as `unlisted: true` (noindex, not
+      in the sitemap, skipped by menus), for the lab909 style guide; a route option to stay out of the
+      sitemap is still open
 - [ ] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
       `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413
 - [ ] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
@@ -473,8 +474,9 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 
 - [x] Create the site, its identity, `.env`, git; local at https://lab909.ddev.site (DDEV hostname
       and nginx block, local only)
-- [ ] Hidden **style guide** page with every content element, for the designer: needs `noindex` and
-      `sitemap: false` for content pages (batch 3.5, pulled forward)
+- [x] **Unlisted content pages** (`unlisted: true`: noindex, not in the sitemap, skipped by menus),
+      instead of separate `noindex` and `sitemap: false` switches (batch 3.5, pulled forward)
+- [ ] Hidden **style guide** page with every content element, for the designer
 - [x] **Syntax highlighting** for code blocks, at compile time (tempest/highlight), asked for while
       listing the content elements for the designer; styles in the skeleton's `app.css`
 - [ ] Projects list (a data collection), pages, design

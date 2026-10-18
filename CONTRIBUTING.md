@@ -60,15 +60,18 @@ The framework is released with tags; sites require `^0.1@dev` and, with `prefer-
 latest tag. The skeleton's CI tests against the framework's `main` branch instead.
 
 1. In `packages/tinytank`: move the entries under **Unreleased** in `CHANGELOG.md` to a new version
-   with today's date, including what sites must change. While TinyTank is 0.x, behaviour changes
-   need a new minor version (0.2.0); fixes only, a patch (0.1.1).
+   with today's date, including what sites must change. While TinyTank is 0.x, changes that need
+   sites to update something go in a new minor version (0.2.0); fixes, and additions that work
+   without any change in a site, in a patch (0.1.1).
 2. All checks green (above), then commit and tag: `git tag -a v0.1.1 -m "TinyTank 0.1.1"`.
 3. A new minor version: update `extra.branch-alias` (`"dev-main": "0.2.x-dev"`) in the framework's
    `composer.json`, the constraint in the skeleton's `composer.json` (`^0.2@dev`) and the docs
    (Updating TinyTank).
-4. Push the framework with its tag first (`git push --follow-tags`). **Wait until Packagist shows the
-   new commit** (packagist.org/packages/tinytank/framework), then push the skeleton, then the docs:
-   the skeleton's CI installs the framework from Packagist, and would test the previous version.
+4. Push the framework with its tag first (`git push --follow-tags`). **Wait until Packagist has the
+   new commit**, then push the skeleton, then the docs: the skeleton's CI installs the framework from
+   Packagist, and would test the previous version. Check the metadata Composer reads, not the package
+   page (cached for hours): `https://repo.packagist.org/p2/tinytank/framework~dev.json` (for `dev-main`)
+   or `…/p2/tinytank/framework.json` (tags); its `reference` is the commit.
    Optionally, tag the skeleton with the same version, and create a GitHub release from the
    changelog entry.
 

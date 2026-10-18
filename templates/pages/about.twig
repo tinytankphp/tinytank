@@ -6,7 +6,7 @@
 {% block content %}
     {{ parent() }}
 
-    {% set children = pages().where('parent', page.path).orderBy('order, title') %}
+    {% set children = pages().where('parent', page.path).where('unlisted', false).orderBy('order, title') %}
     {% if children.exists %}
         <ul class="mt-10 grid gap-4 sm:grid-cols-2">
             {% for child in children %}
