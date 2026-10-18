@@ -64,6 +64,8 @@ return [
     // Default language: served without a URL prefix (/blog). Every other language in `languages`
     // gets its code as prefix (/it/blog). An Italian-only site: 'language' => 'it' and list only 'it';
     // add 'en' later and English appears under /en/. UI texts live in translations/<code>.php.
+    // What visitors who haven't picked a theme get: 'system' (their setting), 'light' or 'dark'.
+    'theme' => ['default' => 'system'],
     'language' => 'en',
     'languages' => [
         'en' => ['name' => 'English', 'locale' => 'en_US'],

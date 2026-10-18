@@ -52,6 +52,8 @@ Templates **query** content; nothing is injected: `pages()`, `posts()`, `collect
   under `data:`. Dates are `YYYY-MM-DD` and must be real days.
 - **A Datastar partial that queues an event sends only its events.** If it calls `patch_signals`
   and must also update HTML, wrap the HTML in `{% apply patch_elements %}…{% endapply %}`.
+- **ARIA states are strings:** `data-attr` writes a boolean as a bare attribute or removes it, so use
+  `data-attr:aria-expanded="String($open)"`, not `="$open"`.
 - **Datastar actions are bound to their method:** a `datastar.post()` URL answers only POST.
   Changes that need authorization belong in a controller, not a template action.
 - **Pages need assets:** run `npm run dev` (with `APP_DEBUG=1`) or `npm run build`; without either,

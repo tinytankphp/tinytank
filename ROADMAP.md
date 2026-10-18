@@ -480,11 +480,22 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       unlisted): it found the image bug below on its first render
 - [x] **Syntax highlighting** for code blocks, at compile time (tempest/highlight), asked for while
       listing the content elements for the designer; styles in the skeleton's `app.css`
-- [ ] Projects list (a data collection), pages, design
+- [x] **Projects** (from the Claude Design handoff): the site's shell (Orbitron and JetBrains Mono
+      self-hosted, the dark/light palette, analog effects kept per visitor with `persist()`), the
+      `projects` collection (12 case files, Markdown bodies with highlighted code), `/projects` in pages
+      of five, a first `/projects/<slug>`. Within ~430 pixels of the design in both themes
+- [ ] The other pages of the design: project page (full), homepage, blog, blog post, about, contact
 - [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
 - [ ] Release the fixes found here as 0.1.x
 
 **Friction log** (fix in TinyTank, then tick):
+- [x] **The default theme was always the system's**; the design is dark first. Added
+      `theme.default` (`'dark'`): the inline script and its CSP hash follow
+- [x] **Templates couldn't tell the current page** for a menu's current section: added `site.path`
+- [x] **Bug:** Vite inlined a tiny font subset as a `data:` URL, which the CSP blocks: the Vite plugin
+      never inlines fonts now (a first Vitest test for the plugin)
+- [x] **Accessibility trap:** `data-attr:aria-checked="$x"` writes `aria-checked=""`; ARIA needs
+      `String($x)`. Caught by a browser test; now in the Datastar and theme docs and in AGENTS.md
 - [x] `create-project` gives the site the template's identity: `composer.json` name `tinytank/tinytank`,
       description and MIT license; `package.json` name `tinytank`; TinyTank's `LICENSE` and
       `SECURITY.md`; the maintainer files `ROADMAP.md` and `CONTRIBUTING.md`. Fix: a
