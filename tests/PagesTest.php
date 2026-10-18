@@ -12,9 +12,12 @@ final class PagesTest extends AppTestCase
     {
         $app = $this->app();
 
-        // The site description from config/app.php, per language.
-        self::assertStringContainsString('<meta name="description" content="A database-free PHP micro framework', self::body($this->request($app, '/')));
-        self::assertStringContainsString('<meta name="description" content="Un micro framework PHP senza database', self::body($this->request($app, '/it')));
+        // The site description from config/app.php, per language (read from the config, so renaming
+        // the site keeps this test green).
+        foreach (['en' => '/', 'it' => '/it'] as $language => $home) {
+            $description = htmlspecialchars($app->site->description($language), ENT_QUOTES | ENT_HTML5);
+            self::assertStringContainsString("<meta name=\"description\" content=\"{$description}\"", self::body($this->request($app, $home)));
+        }
 
         self::assertStringContainsString('Datastar demo', self::body($this->request($app, '/')));
         self::assertStringContainsString('Demo Datastar', self::body($this->request($app, '/it')));
@@ -119,7 +122,7 @@ final class PagesTest extends AppTestCase
         $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
 
         $about = self::body($this->request($app, '/about'));
-        self::assertStringContainsString('<title>About · TinyTank</title>', $about);
+        self::assertStringContainsString('<title>About · ' . $app->site->name() . '</title>', $about);
         self::assertStringContainsString('href="/about/credits"', $about, 'pages/about.twig lists the child pages');
         self::assertMatchesRegularExpression('#<footer.*href="/about".*href="/privacy".*</footer>#s', $about, 'menu in `order`');
 

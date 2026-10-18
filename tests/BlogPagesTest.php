@@ -8,9 +8,9 @@ final class BlogPagesTest extends AppTestCase
 {
     public function testFirstPageWithPagerLinksAndLoadMore(): void
     {
-        $html = self::body($this->request($this->app(), '/blog'));
+        $html = self::body($this->request($app = $this->app(), '/blog'));
 
-        self::assertStringContainsString('<title>Blog · TinyTank</title>', $html);
+        self::assertStringContainsString('<title>Blog · ' . $app->site->name() . '</title>', $html);
         self::assertStringContainsString('href="/blog/first"', $html);
         self::assertStringNotContainsString('href="/blog/second"', $html);
         self::assertStringContainsString('rel="next" href="/blog/page/2"', $html);
@@ -21,9 +21,9 @@ final class BlogPagesTest extends AppTestCase
 
     public function testMiddlePage(): void
     {
-        $html = self::body($this->request($this->app(), '/blog/page/2'));
+        $html = self::body($this->request($app = $this->app(), '/blog/page/2'));
 
-        self::assertStringContainsString('<title>Blog · Page 2 · TinyTank</title>', $html);
+        self::assertStringContainsString('<title>Blog · Page 2 · ' . $app->site->name() . '</title>', $html);
         self::assertStringContainsString('<link rel="canonical" href="https://example.test/blog/page/2">', $html);
         self::assertStringContainsString('href="/blog/second"', $html);
         self::assertStringContainsString('rel="prev" href="/blog"', $html);
@@ -84,9 +84,9 @@ final class BlogPagesTest extends AppTestCase
 
     public function testTranslatedPostLinksItsOtherVersion(): void
     {
-        $html = self::body($this->request($this->app(), '/it/blog/first'));
+        $html = self::body($this->request($app = $this->app(), '/it/blog/first'));
 
-        self::assertStringContainsString('<title>Primo articolo · TinyTank</title>', $html);
+        self::assertStringContainsString('<title>Primo articolo · ' . $app->site->name('it') . '</title>', $html);
         self::assertStringContainsString('hreflang="en" href="https://example.test/blog/first"', $html);
         self::assertStringContainsString('hreflang="it" href="https://example.test/it/blog/first"', $html);
         self::assertStringContainsString('<meta property="article:tag" content="news">', $html, 'tags inherited from index.md');
