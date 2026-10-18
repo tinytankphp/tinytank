@@ -35,6 +35,7 @@ Don't bring habits from Laravel or Symfony that don't apply here:
 | A page that computes on each request | a route in `config/routes.php`, a controller in `src/Controller/`, a template in `templates/` | `1.x/getting-started/first-page` |
 | Browser-only interactivity (toggle, counter, tabs) | Datastar signals: `data-signals="{open: false}"`, `data-on:click="$open = !$open"`, `data-show="$open"` | `1.x/basics/datastar` |
 | Interactivity the server decides (search, forms, lookups) | a template action: `{{ datastar.post('_partials/x') }}` renders `templates/_partials/x.twig` with the browser's `signals` | `1.x/basics/datastar` |
+| A value every template needs (social links, phone, address) | `config/globals.php` returns an array; templates read `{{ globals.socials.github }}`. Public: no secrets | `1.x/basics/templates#global-values` |
 | A form that emails | `config/forms.php` and `form:` in a content page's front matter | `1.x/features/forms` |
 | Images | put them next to the Markdown and reference them (`![Alt](photo.jpg)`): responsive AVIF/WebP automatically; in Twig, `image()` | `1.x/features/images` |
 | A reusable block inside Markdown | a content component: `::name{key="value"}` on its own line renders `templates/_components/name.twig` | `1.x/content/components` |

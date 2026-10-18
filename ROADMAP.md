@@ -484,11 +484,27 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       self-hosted, the dark/light palette, analog effects kept per visitor with `persist()`), the
       `projects` collection (12 case files, Markdown bodies with highlighted code), `/projects` in pages
       of five, a first `/projects/<slug>`. Within ~430 pixels of the design in both themes
-- [ ] The other pages of the design: project page (full), homepage, blog, blog post, about, contact
+- [x] **Homepage**: the hero with SEQ-909, a working drum sequencer (Web Audio, synthesized 909-style
+      voices, a lookahead scheduler; silent until the first tap; tempo 60–220, random patterns), the
+      latest case files as cards, the latest blog posts, three featured sponsors. Projects and sponsor
+      reviews share one article layout (the Blog Post design), ready for the blog
+- [x] **Sponsors**: tool reviews with affiliate links, as child pages of `content/pages/sponsors/`
+      (images next to the Markdown, `data.date`, `data.featured`), `rel="sponsored"` and a disclosure;
+      Privacy, Cookies and Sponsors in the footer; social links from `config/globals.php`
+- [ ] The other pages of the design: project page (full), blog, blog post, about, contact
 - [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
 - [ ] Release the fixes found here as 0.1.x
 
 **Friction log** (fix in TinyTank, then tick):
+- [x] **No place for site-wide values** (social links): added `config/globals.php` → `globals`
+- [x] **Pages couldn't be filtered or sorted by `data`** (sponsors by date, the featured three):
+      `data` wasn't a query field, and queries had no paths; now `where('data.featured', true)`
+- [ ] **Collection items can't have their own images**, so the channels' images are plain files in
+      `public/`, sized by hand, without AVIF/WebP versions. Responsive images for `public/` files, or
+      collection folders?
+- [x] **Reduced motion vs. an effect the visitor asked for:** the skeleton's reduced-motion rule
+      (`!important` in `@layer base`) froze the VHS roll under the header; an override has to be in
+      the same layer. Site-level, but worth a line in the accessibility docs
 - [x] **The default theme was always the system's**; the design is dark first. Added
       `theme.default` (`'dark'`): the inline script and its CSP hash follow
 - [x] **Templates couldn't tell the current page** for a menu's current section: added `site.path`
