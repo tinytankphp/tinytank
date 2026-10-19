@@ -501,9 +501,6 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 - [x] **No place for site-wide values** (social links): added `config/globals.php` → `globals`
 - [x] **Pages couldn't be filtered or sorted by `data`** (sponsors by date, the featured three):
       `data` wasn't a query field, and queries had no paths; now `where('data.featured', true)`
-- [ ] **Collection items can't have their own images**, so the channels' images are plain files in
-      `public/`, sized by hand, without AVIF/WebP versions. Responsive images for `public/` files, or
-      collection folders?
 - [x] **Reduced motion vs. an effect the visitor asked for:** the skeleton's reduced-motion rule
       (`!important` in `@layer base`) froze the VHS roll under the header; an override has to be in
       the same layer. Site-level, but worth a line in the accessibility docs
@@ -536,6 +533,46 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
       licenses), linked from the README and the script's output
 - [x] The style guide joined the skeleton (`content/pages/style-guide/`), with a PHPUnit and a browser
       test: with the image bug reintroduced, both suites fail, so it would have been caught before 0.1.0
+
+**From the lab909 retrospective** (2026-10-19, after building every page of the design), in order:
+
+1. [ ] **`content()` survives `{% set %}`**: return a Twig `Markup`, so `{% set body = content(page) %}`
+       prints HTML, not escaped text (hit twice in lab909, also with `block()`). Small, prevents bugs
+2. [ ] **Error messages that name the fix**: `'?metrics' => 'array'` fails with "field names use
+       lowercase letters…"; say "optional: put `?` on the type, `'metrics' => '?array'`". Look for
+       other messages that could suggest the fix the same way
+3. [ ] **Collection items with their own images**: the project images are files in `public/`, sized
+       by hand (`<slug>.webp` + `<slug>.800.webp`, the `srcset` built by string replacement), without
+       AVIF. Preferred: collection items as folders (`content/projects/pulse-os/index.md` + images),
+       like posts and pages, with `image()` and Markdown images responsive. Alternative or addition:
+       `image()` making versions of `public/` files
+4. [ ] **A default template for child pages**: each sponsor review needs
+       `template: pages/sponsor.twig`. In the parent's front matter: `children: {template: …}`
+5. [ ] **`except()` and `neighbours()` in queries**: "everything but this one" was
+       `|filter(p => p.path != page.path)` twice (related posts, more sponsors); prev / next was
+       written by hand in ProjectsController (wrapping around). `query.except(item)`,
+       `query.neighbours(item, wrap: true)` → `{prev, next}`
+6. [ ] **Reading time for pages and collection items**, as posts have `reading_minutes` (lab909 has
+       a `minutes()` macro)
+7. [ ] **Reduced motion in the skeleton CSS**: the `!important` rule in `@layer base` can't be
+       overridden by a site's own CSS. It froze the VHS roll and made hover shifts jump. A gentler
+       default (transitions of colour kept, movement behind `motion-safe:` in templates) and a docs
+       section on motion
+8. [ ] **A test helper for the real content**: `'content_dir' => self::ROOT . '/content'` is in nearly
+       every lab909 test; `AppTestCase::realSite()` (or a flag)
+9. [ ] **Removing the starter content in one step**: an hour by hand in lab909 (the search / like /
+       clock / tone demos, the FAQ collection, the demo posts and covers, Italian), each with its
+       tests. `bin/console site:clean` (or a question in `create-project`) removing them and their
+       tests. lab909 still has the FAQ collection and the "Starlite" cover
+10. [ ] **A simpler blog pager in the skeleton**: "Load more" for JavaScript plus hidden numbered
+       links for crawlers is clever but hard to restyle; lab909 went to numbered pages, with "Load
+       more" only for search and tag results. Consider that as the default
+11. [ ] *Watch*: **a dated section made of pages** (sponsors is a second blog: dated, listed, could
+       want pages and a feed). Pages with `data.date` work, but a list of pages can't paginate with
+       URLs. Build only if a second site needs it
+
+Nothing to remove from the framework: what lab909 doesn't use (CDN purge, more forms, languages)
+costs nothing when off.
 
 ---
 
