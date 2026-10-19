@@ -600,14 +600,16 @@ no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an
       robots), copy `public/` (the build, published media, favicon), `404.html`. A `site.static`
       flag for templates. Server-only features refused by name ("/blog uses a server action
       `_partials/blog-results`: not in a static build"). Test site: lab909
-- [ ] **2. Host adapters**: `HostAdapter::files(Build): array` (path => contents) from what the
+- [x] **2. Host adapters**: `HostAdapter::files(Build): array` (path => contents) from what the
       build collected: every page's headers, every redirect, the base URL. Built in: `cloudflare`
       (`_headers`, `_redirects`), `netlify`, `none` (redirects as small HTML pages). CSP: one
       site-wide policy, the union of what pages add to `frame-src`/`img-src`/`media-src`, with the
       same strict `script-src`; per-page rules only for pages that widen `script-src` or
       `connect-src` (rare), refused past the host's limits. Check Cloudflare's current limits and
       rule precedence when building. The adapter also decides the file layout (`blog/index.html` or
-      `blog.html`), so URLs stay exactly the PHP site's (`/blog`, no added slash or redirect)
+      `blog.html`), so URLs stay exactly the PHP site's (`/blog`, no added slash or redirect).
+      Done for `cloudflare` and `none`, checked with `wrangler pages dev`: `<path>.html`, merged rules
+      detached with `! Content-Security-Policy`. `netlify` when needed (check its rule merging first)
 - [ ] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
       browser); forms posting to a service or a function (an endpoint per form in
       `config/forms.php`), same markup and messages; later, functions an adapter can add
