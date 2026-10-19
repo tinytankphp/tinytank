@@ -549,7 +549,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        after the next release
 4. [x] **A default template for child pages**: each sponsor review needs
        `template: pages/sponsor.twig`. In the parent's front matter: `children: {template: …}`
-5. [ ] **`except()` and `neighbours()` in queries**: "everything but this one" was
+5. [x] **`except()` and `neighbours()` in queries**: "everything but this one" was
        `|filter(p => p.path != page.path)` twice (related posts, more sponsors); prev / next was
        written by hand in ProjectsController (wrapping around). `query.except(item)`,
        `query.neighbours(item, wrap: true)` → `{prev, next}`
