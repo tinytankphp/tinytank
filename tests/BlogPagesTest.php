@@ -6,7 +6,7 @@ namespace App\Tests;
 
 final class BlogPagesTest extends AppTestCase
 {
-    public function testFirstPageWithPagerLinksAndLoadMore(): void
+    public function testFirstPageWithNumberedPages(): void
     {
         $html = self::body($this->request($app = $this->app(), '/blog'));
 
@@ -15,8 +15,8 @@ final class BlogPagesTest extends AppTestCase
         self::assertStringNotContainsString('href="/blog/second"', $html);
         self::assertStringContainsString('rel="next" href="/blog/page/2"', $html);
         self::assertStringNotContainsString('rel="prev"', $html);
-        self::assertStringContainsString('1 of 3 posts', $html);
-        self::assertStringContainsString('Load more', $html);
+        self::assertMatchesRegularExpression('#<a href="/blog/page/3"[^>]*>3</a>#', $html, 'numbered pages, without JavaScript too');
+        self::assertStringNotContainsString('Load more', $html, 'pages have URLs: no "Load more"');
     }
 
     public function testMiddlePage(): void
@@ -107,34 +107,25 @@ final class BlogPagesTest extends AppTestCase
     }
     // example:end
 
-    public function testLoadMoreAppendsTheNextPageAndReplacesThePager(): void
+    public function testSearchFiltersAndPagesThroughTheResultsWithLoadMore(): void
     {
         $app = $this->app();
-        $url = $this->datastarUrl(self::body($this->request($app, '/blog')), '_partials/blog-more');
-        $events = self::body($this->request($app, $url . '&datastar=' . rawurlencode('{"q":"","tag":"","page":2}'), 'GET', ['Datastar-Request' => 'true']));
-
-        self::assertStringContainsString("data: selector #blog-posts\ndata: mode append", $events);
-        self::assertStringContainsString('href="/blog/second"', $events);
-        self::assertStringContainsString('<nav id="blog-pager"', $events);
-        self::assertStringContainsString('2 of 3 posts', $events);
-    }
-
-    public function testSearchFiltersAndKeepsLoadMoreWithinTheResults(): void
-    {
-        $app = $this->app();
-        $html = self::body($this->request($app, '/blog'));
-        $search = $this->datastarUrl($html, '_partials/blog-results');
-        $more = $this->datastarUrl($html, '_partials/blog-more');
+        $search = $this->datastarUrl(self::body($this->request($app, '/blog')), '_partials/blog-results');
 
         $results = self::body($this->request($app, $search . '&datastar=' . rawurlencode('{"q":"","tag":"guide","page":1}')));
         self::assertStringContainsString('href="/blog/second"', $results);
         self::assertStringNotContainsString('href="/blog/first"', $results);
         self::assertStringContainsString('1 of 2 posts', $results);
+        self::assertStringContainsString('Load more', $results);
         self::assertStringNotContainsString('rel="next"', $results, 'filtered results have no page URLs');
 
-        $next = self::body($this->request($app, $more . '&datastar=' . rawurlencode('{"q":"","tag":"guide","page":2}')));
+        // "Load more" appends the next match and replaces the pager.
+        $more = $this->datastarUrl($results, '_partials/blog-more');
+        $next = self::body($this->request($app, $more . '&datastar=' . rawurlencode('{"q":"","tag":"guide","page":2}'), 'GET', ['Datastar-Request' => 'true']));
+        self::assertStringContainsString("data: selector #blog-posts\ndata: mode append", $next);
         self::assertStringContainsString('href="/blog/third"', $next);
-        self::assertStringNotContainsString('Load more', $next);
+        self::assertStringContainsString('<nav id="blog-pager"', $next);
+        self::assertStringNotContainsString('Load more', $next, 'no more matches');
     }
 
     public function testFeedPerLanguage(): void

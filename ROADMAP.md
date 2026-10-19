@@ -565,7 +565,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        clock / tone demos, the FAQ collection, the demo posts and covers, Italian), each with its
        tests. `bin/console site:clean` (or a question in `create-project`) removing them and their
        tests. lab909 still has the FAQ collection and the "Starlite" cover
-10. [ ] **A simpler blog pager in the skeleton**: "Load more" for JavaScript plus hidden numbered
+10. [x] **A simpler blog pager in the skeleton**: "Load more" for JavaScript plus hidden numbered
        links for crawlers is clever but hard to restyle; lab909 went to numbered pages, with "Load
        more" only for search and tag results. Consider that as the default
 11. [ ] **Posts' front matter is lenient**: pages and collections refuse an unknown key (now with
