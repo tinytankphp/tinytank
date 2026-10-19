@@ -547,7 +547,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        like posts and pages, with `image()` and Markdown images responsive. Alternative or addition:
        `image()` making versions of `public/` files. Done as folders; lab909's projects move to them
        after the next release
-4. [ ] **A default template for child pages**: each sponsor review needs
+4. [x] **A default template for child pages**: each sponsor review needs
        `template: pages/sponsor.twig`. In the parent's front matter: `children: {template: …}`
 5. [ ] **`except()` and `neighbours()` in queries**: "everything but this one" was
        `|filter(p => p.path != page.path)` twice (related posts, more sponsors); prev / next was
