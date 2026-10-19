@@ -541,11 +541,12 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 2. [x] **Error messages that name the fix**: `'?metrics' => 'array'` fails with "field names use
        lowercase letters…"; say "optional: put `?` on the type, `'metrics' => '?array'`". Look for
        other messages that could suggest the fix the same way
-3. [ ] **Collection items with their own images**: the project images are files in `public/`, sized
+3. [x] **Collection items with their own images**: the project images are files in `public/`, sized
        by hand (`<slug>.webp` + `<slug>.800.webp`, the `srcset` built by string replacement), without
        AVIF. Preferred: collection items as folders (`content/projects/pulse-os/index.md` + images),
        like posts and pages, with `image()` and Markdown images responsive. Alternative or addition:
-       `image()` making versions of `public/` files
+       `image()` making versions of `public/` files. Done as folders; lab909's projects move to them
+       after the next release
 4. [ ] **A default template for child pages**: each sponsor review needs
        `template: pages/sponsor.twig`. In the parent's front matter: `children: {template: …}`
 5. [ ] **`except()` and `neighbours()` in queries**: "everything but this one" was

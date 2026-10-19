@@ -9,6 +9,8 @@ use App\Controller\PageController;
 use TinyTank\Blog\AssetController;
 use TinyTank\Blog\Blog;
 use TinyTank\Blog\FeedController;
+use TinyTank\Collections\AssetController as CollectionAssetController;
+use TinyTank\Collections\Collections;
 use TinyTank\Kernel;
 use TinyTank\Pages\AssetController as PageAssetController;
 use TinyTank\Pages\Pages;
@@ -24,6 +26,8 @@ return static function (Kernel $app): void {
     $app->get('/blog/{slug}', [BlogController::class, 'show'], 'blog_post', ['slug' => '[a-z0-9]+(?:-[a-z0-9]+)*']);
     // Post images and files. In production `deploy` copies them to public/, so this only runs in development.
     $app->get(Blog::ASSET_URL . '/{slug}/{file}', AssetController::class, 'blog_asset', ['file' => '.+']);
+    // The files of collection items that are folders (content/<collection>/<slug>/index.md), likewise.
+    $app->get(Collections::ASSET_URL . '/{file}', CollectionAssetController::class, 'collection_asset', ['file' => '.+']);
 
     // Feeds for crawlers and readers (framework controllers)
     $app->get('/blog/feed.xml', FeedController::class, 'blog_feed');
