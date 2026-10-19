@@ -491,7 +491,9 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 - [x] **Sponsors**: tool reviews with affiliate links, as child pages of `content/pages/sponsors/`
       (images next to the Markdown, `data.date`, `data.featured`), `rel="sponsored"` and a disclosure;
       Privacy, Cookies and Sponsors in the footer; social links from `config/globals.php`
-- [ ] The other pages of the design: project page (full), blog, blog post, about, contact
+- [x] **The other pages**: the blog (cards, numbered pages, the search and tag filter kept), blog
+      posts, About, Contact and every content page in the shared article layout (`data.heading`,
+      `data.status`, `data.meta` for the line above the title)
 - [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
 - [ ] Release the fixes found here as 0.1.x
 
