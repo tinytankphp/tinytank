@@ -536,7 +536,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 
 **From the lab909 retrospective** (2026-10-19, after building every page of the design), in order:
 
-1. [ ] **`content()` survives `{% set %}`**: return a Twig `Markup`, so `{% set body = content(page) %}`
+1. [x] **`content()` survives `{% set %}`**: return a Twig `Markup`, so `{% set body = content(page) %}`
        prints HTML, not escaped text (hit twice in lab909, also with `block()`). Small, prevents bugs
 2. [ ] **Error messages that name the fix**: `'?metrics' => 'array'` fails with "field names use
        lowercase letters…"; say "optional: put `?` on the type, `'metrics' => '?array'`". Look for
