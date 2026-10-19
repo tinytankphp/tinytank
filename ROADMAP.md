@@ -553,7 +553,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        `|filter(p => p.path != page.path)` twice (related posts, more sponsors); prev / next was
        written by hand in ProjectsController (wrapping around). `query.except(item)`,
        `query.neighbours(item, wrap: true)` → `{prev, next}`
-6. [ ] **Reading time for pages and collection items**, as posts have `reading_minutes` (lab909 has
+6. [x] **Reading time for pages and collection items**, as posts have `reading_minutes` (lab909 has
        a `minutes()` macro)
 7. [ ] **Reduced motion in the skeleton CSS**: the `!important` rule in `@layer base` can't be
        overridden by a site's own CSS. It froze the VHS roll and made hover shifts jump. A gentler
