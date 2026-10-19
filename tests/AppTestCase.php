@@ -8,8 +8,9 @@ use TinyTank\Kernel;
 use TinyTank\Testing\KernelTestCase;
 
 /**
- * Boots this site (its config/, controllers and templates) with the fixture content in
- * tests/data/content, one post per page and a throw-away cache directory.
+ * Boots this site (its config/, controllers and templates): app() with the fixture content in
+ * tests/data/content and one post per page, site() with the site's real content/; both with a
+ * throw-away cache directory.
  * Without a Vite build, pages render without their asset tags and the tests that check assets are
  * skipped (requireViteBuild()): run `npm run build` to run them too, as CI does.
  */
@@ -24,6 +25,17 @@ abstract class AppTestCase extends KernelTestCase
             'content_dir' => __DIR__ . '/data/content',
             'blog' => ['per_page' => 1],
         ], $overrides));
+    }
+
+    /**
+     * The site with its real content/ (pages, posts, collections), for tests of what visitors see.
+     * Fixture-independent settings stay as app() sets them (one post per page).
+     *
+     * @param array<string, mixed> $overrides
+     */
+    protected function site(bool $debug = false, array $overrides = []): Kernel
+    {
+        return $this->app($debug, ['content_dir' => self::ROOT . '/content'] + $overrides);
     }
 
     /**

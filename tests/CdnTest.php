@@ -12,7 +12,7 @@ final class CdnTest extends AppTestCase
 {
     public function testPagesAreKeptAtTheCdnButNotTheContactForm(): void
     {
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content', 'cdn' => ['enabled' => true]]);
+        $app = $this->site(overrides: ['cdn' => ['enabled' => true]]);
 
         foreach (['/', '/blog', '/about', '/it/chi-siamo'] as $page) {
             self::assertStringContainsString('s-maxage=', (string) $this->request($app, $page)->headers->get('Cache-Control'), $page);

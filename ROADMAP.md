@@ -559,7 +559,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        overridden by a site's own CSS. It froze the VHS roll and made hover shifts jump. A gentler
        default (transitions of colour kept, movement behind `motion-safe:` in templates) and a docs
        section on motion
-8. [ ] **A test helper for the real content**: `'content_dir' => self::ROOT . '/content'` is in nearly
+8. [x] **A test helper for the real content**: `'content_dir' => self::ROOT . '/content'` is in nearly
        every lab909 test; `AppTestCase::realSite()` (or a flag)
 9. [ ] **Removing the starter content in one step**: an hour by hand in lab909 (the search / like /
        clock / tone demos, the FAQ collection, the demo posts and covers, Italian), each with its

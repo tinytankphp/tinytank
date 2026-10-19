@@ -25,7 +25,7 @@ final class PagesTest extends AppTestCase
 
     public function testTheStyleGuideShowsEveryElementButStaysUnlisted(): void
     {
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $app = $this->site();
         $html = self::body($response = $this->request($app, '/style-guide'));
 
         self::assertSame(200, $response->getStatusCode());
@@ -107,7 +107,7 @@ final class PagesTest extends AppTestCase
     public function testTheSitesOwnContentIsValid(): void
     {
         // The real content/, not the fixtures: a broken post or collection file fails here, in CI.
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $app = $this->site();
         self::assertTrue($app->posts()->exists());
         self::assertNotEmpty($app->collections->warmup());
         self::assertTrue($app->pages()->exists());
@@ -119,7 +119,7 @@ final class PagesTest extends AppTestCase
 
     public function testContentPagesWithTheirTemplatesAndTheFooterMenu(): void
     {
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $app = $this->site();
 
         $about = self::body($this->request($app, '/about'));
         self::assertStringContainsString('<title>About · ' . $app->site->name() . '</title>', $about);
@@ -144,7 +144,7 @@ final class PagesTest extends AppTestCase
     public function testContentComponentsRenderInPosts(): void
     {
         // Production mode: a missing video poster is never downloaded during a request (only by deploy).
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $app = $this->site();
 
         // ::related-posts{limit=2} at the end of the post: templates/_components/related-posts.twig.
         $post = self::body($this->request($app, '/blog/hello-tinytank'));
@@ -163,7 +163,7 @@ final class PagesTest extends AppTestCase
 
     public function testPostImagesAreResponsive(): void
     {
-        $app = $this->app(overrides: ['content_dir' => self::ROOT . '/content']);
+        $app = $this->site();
         $html = self::body($this->request($app, '/blog/hello-tinytank'));
 
         // The cover through image(): modern versions at several widths, the original's size, not lazy.
