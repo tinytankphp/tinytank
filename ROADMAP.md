@@ -538,7 +538,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 
 1. [x] **`content()` survives `{% set %}`**: return a Twig `Markup`, so `{% set body = content(page) %}`
        prints HTML, not escaped text (hit twice in lab909, also with `block()`). Small, prevents bugs
-2. [ ] **Error messages that name the fix**: `'?metrics' => 'array'` fails with "field names use
+2. [x] **Error messages that name the fix**: `'?metrics' => 'array'` fails with "field names use
        lowercase letters…"; say "optional: put `?` on the type, `'metrics' => '?array'`". Look for
        other messages that could suggest the fix the same way
 3. [ ] **Collection items with their own images**: the project images are files in `public/`, sized
@@ -567,7 +567,10 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 10. [ ] **A simpler blog pager in the skeleton**: "Load more" for JavaScript plus hidden numbered
        links for crawlers is clever but hard to restyle; lab909 went to numbered pages, with "Load
        more" only for search and tag results. Consider that as the default
-11. [ ] *Watch*: **a dated section made of pages** (sponsors is a second blog: dated, listed, could
+11. [ ] **Posts' front matter is lenient**: pages and collections refuse an unknown key (now with
+       "did you mean"), posts silently ignore it (`sumary:`, `tag:`). Make posts strict too, with a
+       `data:` key for custom values like pages: a behaviour change, so a 0.2 with upgrade notes
+12. [ ] *Watch*: **a dated section made of pages** (sponsors is a second blog: dated, listed, could
        want pages and a feed). Pages with `data.date` work, but a list of pages can't paginate with
        URLs. Build only if a second site needs it
 
