@@ -115,8 +115,8 @@ $keep = match (true) {
     in_array('--remove-examples', $options, true) => false,
     in_array('--keep-examples', $options, true) => true,
     function_exists('stream_isatty') && stream_isatty(STDIN) => (static function (): bool {
-        echo "\n  Keep TinyTank's examples (demos on the home page, sample posts, an Italian translation)?\n"
-            . "  They show how things work; `php bin/console site:clean` removes them any time. [Y/n] ";
+        echo "\n  Keep TinyTank's examples? (demos, sample posts, an Italian translation: you can easily\n"
+            . "  remove them later with a one-off console command, php bin/console site:clean) [Y/n] ";
         $answer = strtolower(trim((string) fgets(STDIN)));
 
         return $answer === '' || $answer[0] !== 'n';
