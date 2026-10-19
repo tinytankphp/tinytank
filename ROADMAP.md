@@ -579,6 +579,42 @@ costs nothing when off.
 
 ---
 
+## 5b. Static builds
+
+The same site, two outputs: the PHP site as today (`deploy`), or a folder of plain files for a static
+host (`build:static`), with development dynamic in both cases. Same content, templates and assets:
+no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an adapter.
+
+```php
+// config/app.php
+'static' => [
+    'out' => 'deploy',
+    'base_url' => 'https://example.com',
+    'host' => 'cloudflare',      // 'netlify', 'none', or a class implementing TinyTank\Static\HostAdapter
+],
+```
+
+- [ ] **1. `bin/console build:static`**: find every URL (from `/`, the sitemap and the feed, then
+      the internal links of every page rendered; routes nothing links to listed in config), render
+      each through the kernel in production mode, write `<path>/index.html` (and the feed, sitemap,
+      robots), copy `public/` (the build, published media, favicon), `404.html`. A `site.static`
+      flag for templates. Server-only features refused by name ("/blog uses a server action
+      `_partials/blog-results`: not in a static build"). Test site: lab909
+- [ ] **2. Host adapters**: `HostAdapter::files(Build): array` (path => contents) from what the
+      build collected: every page's headers, every redirect, the base URL. Built in: `cloudflare`
+      (`_headers`, `_redirects`), `netlify`, `none` (redirects as small HTML pages). CSP: one
+      site-wide policy, the union of what pages add to `frame-src`/`img-src`/`media-src`, with the
+      same strict `script-src`; per-page rules only for pages that widen `script-src` or
+      `connect-src` (rare), refused past the host's limits. Check Cloudflare's current limits and
+      rule precedence when building
+- [ ] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
+      browser); forms posting to a service or a function (an endpoint per form in
+      `config/forms.php`), same markup and messages; later, functions an adapter can add
+      (Cloudflare Pages Functions)
+- [ ] **4. Preview**: serve the output folder locally, to check the site exactly as uploaded
+
+---
+
 ## 6. For the Nocturne repository (not TinyTank)
 
 Kept here only as a reminder of what the Nocturne site will add on top of TinyTank:
