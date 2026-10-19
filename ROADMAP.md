@@ -545,8 +545,7 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
        by hand (`<slug>.webp` + `<slug>.800.webp`, the `srcset` built by string replacement), without
        AVIF. Preferred: collection items as folders (`content/projects/pulse-os/index.md` + images),
        like posts and pages, with `image()` and Markdown images responsive. Alternative or addition:
-       `image()` making versions of `public/` files. Done as folders; lab909's projects move to them
-       after the next release
+       `image()` making versions of `public/` files. Done as folders (0.1.6); lab909's projects use them
 4. [x] **A default template for child pages**: each sponsor review needs
        `template: pages/sponsor.twig`. In the parent's front matter: `children: {template: …}`
 5. [x] **`except()` and `neighbours()` in queries**: "everything but this one" was
