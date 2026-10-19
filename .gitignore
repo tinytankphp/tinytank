@@ -4,6 +4,9 @@
 /public/media/
 /var/cache/*
 !/var/cache/.gitkeep
+# The static build (bin/console build:static) and its own cache
+/deploy/
+/var/static-cache/
 /var/vite.hot
 # Encoded images (responsive versions, originals without metadata), reused across deploys
 /var/images/

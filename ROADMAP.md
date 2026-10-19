@@ -594,7 +594,7 @@ no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an
 ],
 ```
 
-- [ ] **1. `bin/console build:static`**: find every URL (from `/`, the sitemap and the feed, then
+- [x] **1. `bin/console build:static`**: find every URL (from `/`, the sitemap and the feed, then
       the internal links of every page rendered; routes nothing links to listed in config), render
       each through the kernel in production mode, write `<path>/index.html` (and the feed, sitemap,
       robots), copy `public/` (the build, published media, favicon), `404.html`. A `site.static`
@@ -606,7 +606,8 @@ no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an
       site-wide policy, the union of what pages add to `frame-src`/`img-src`/`media-src`, with the
       same strict `script-src`; per-page rules only for pages that widen `script-src` or
       `connect-src` (rare), refused past the host's limits. Check Cloudflare's current limits and
-      rule precedence when building
+      rule precedence when building. The adapter also decides the file layout (`blog/index.html` or
+      `blog.html`), so URLs stay exactly the PHP site's (`/blog`, no added slash or redirect)
 - [ ] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
       browser); forms posting to a service or a function (an endpoint per form in
       `config/forms.php`), same markup and messages; later, functions an adapter can add

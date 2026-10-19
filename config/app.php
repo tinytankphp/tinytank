@@ -95,6 +95,8 @@ return [
         'report_only' => false,
         'sources' => [],
     ],
+    // `bin/console build:static`: the site as plain files for a static host (see the docs, Static builds).
+    // 'static' => ['out' => 'deploy', 'base_url' => 'https://example.com', 'paths' => ['/style-guide']],
     // Site-wide SEO defaults; pages override them through `seo` (see README, "SEO").
     // Each value is the same in every language, or a map language => value; a language left out of
     // a map uses the default language's (null in a map: none in that language, e.g. no image).
