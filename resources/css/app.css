@@ -85,7 +85,10 @@
 /*
  * Accessibility basics. Keyboard focus is always visible, in the theme's colour, whatever an element's
  * own styles (the mouse doesn't trigger :focus-visible on links and buttons, so clicks stay clean).
- * Visitors who ask their system for less motion get no transitions, animations or smooth scrolling.
+ * Visitors who ask their system for less motion get no movement: animations stop, transitions keep
+ * only colours and opacity (a hover still fades, nothing slides), no smooth scrolling. Movement you
+ * add yourself (a hover shift, a lift) belongs behind `motion-safe:`, so it doesn't jump instead.
+ * An effect a visitor switched on knowingly can keep moving: give it the class `motion-allowed`.
  */
 @layer base {
     :focus-visible {
@@ -94,12 +97,12 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        *,
-        ::before,
-        ::after {
+        *:not(.motion-allowed),
+        :not(.motion-allowed)::before,
+        :not(.motion-allowed)::after {
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
+            transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity !important;
             scroll-behavior: auto !important;
         }
     }
