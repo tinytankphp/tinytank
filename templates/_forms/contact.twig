@@ -5,8 +5,9 @@
 #}
 {% set url = path('page', {path: page.path}) %}
 {% set input = 'w-full rounded-md border border-line-strong bg-surface px-3 py-2' %}
-<form id="contact-form" method="post" action="{{ url }}" class="mt-8 space-y-5"
-      data-on:submit__prevent="{{ datastar.action('post', url, {contentType: 'form'}) }}" data-indicator:_sending>
+{# In a static build (bin/console build:static) the host answers the form: a plain post to it. #}
+<form id="contact-form" method="post" action="{{ form_action('contact', url) }}" class="mt-8 space-y-5"
+      {% if not site.static %}data-on:submit__prevent="{{ datastar.action('post', url, {contentType: 'form'}) }}" {% endif %}data-indicator:_sending>
     {% if form.sent %}
         <p role="status" class="rounded-md border border-line bg-surface p-4">{{ 'Thanks! Your message is on its way.'|t }}</p>
     {% else %}
