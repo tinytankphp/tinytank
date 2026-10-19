@@ -16,6 +16,7 @@
 //   json      true or a list of fields: served at /data/<name>.json for JavaScript (default: none).
 //             An allowlist: only those fields are public.
 return [
+    // example:start (the home page's FAQ: `php bin/console site:clean` removes it)
     'faq' => [
         'fields' => [
             'question' => 'string',
@@ -23,4 +24,5 @@ return [
         ],
         'sort' => 'order',
     ],
+    // example:end
 ];

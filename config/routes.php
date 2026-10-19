@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Controller\BlogController;
+// example:start
 use App\Controller\ClockController;
+// example:end
 use App\Controller\HomeController;
 use App\Controller\PageController;
 use TinyTank\Blog\AssetController;
@@ -34,8 +36,10 @@ return static function (Kernel $app): void {
     $app->get('/sitemap.xml', SitemapController::class, 'sitemap');
     $app->get('/robots.txt', RobotsController::class, 'robots');
 
+    // example:start (a demo on the home page: `php bin/console site:clean` removes it)
     // Datastar actions
     $app->post('/clock', ClockController::class, 'clock');
+    // example:end
 
     // Content pages: content/pages/privacy/index.md is /privacy. A catch-all, so it has a low priority:
     // every other route wins, wherever it's added. `deploy` reports pages that a route hides.

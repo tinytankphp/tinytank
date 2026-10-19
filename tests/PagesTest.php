@@ -8,20 +8,32 @@ use TinyTank\Theme;
 
 final class PagesTest extends AppTestCase
 {
-    public function testHomePageInBothLanguages(): void
+    public function testHomePage(): void
     {
         $app = $this->app();
+        $html = self::body($this->request($app, '/'));
 
-        // The site description from config/app.php, per language (read from the config, so renaming
-        // the site keeps this test green).
-        foreach (['en' => '/', 'it' => '/it'] as $language => $home) {
-            $description = htmlspecialchars($app->site->description($language), ENT_QUOTES | ENT_HTML5);
-            self::assertStringContainsString("<meta name=\"description\" content=\"{$description}\"", self::body($this->request($app, $home)));
-        }
-
-        self::assertStringContainsString('Datastar demo', self::body($this->request($app, '/')));
-        self::assertStringContainsString('Demo Datastar', self::body($this->request($app, '/it')));
+        // The site's name and description from config/app.php (read from there, so renaming the site
+        // keeps this test green), and the latest posts (the fixtures' three).
+        self::assertMatchesRegularExpression('#<h1[^>]*>' . preg_quote(htmlspecialchars($app->site->name(), ENT_QUOTES | ENT_HTML5), '#') . '</h1>#', $html);
+        $description = htmlspecialchars($app->site->description(), ENT_QUOTES | ENT_HTML5);
+        self::assertStringContainsString("<meta name=\"description\" content=\"{$description}\"", $html);
+        self::assertMatchesRegularExpression('#Latest posts.*href="/blog/first".*href="/blog/second".*href="/blog/third"#s', $html);
     }
+
+    // example:start (the examples on the home page: `php bin/console site:clean` removes these tests with them)
+    public function testTheExamplesOnTheHomePage(): void
+    {
+        $app = $this->app();
+        $html = self::body($this->request($app, '/'));
+
+        self::assertStringContainsString('Datastar demo', $html);
+        self::assertStringContainsString('php bin/console site:clean', $html, 'how to remove them');
+        $description = htmlspecialchars($app->site->description('it'), ENT_QUOTES | ENT_HTML5);
+        self::assertStringContainsString("<meta name=\"description\" content=\"{$description}\"", $italian = self::body($this->request($app, '/it')));
+        self::assertStringContainsString('Demo Datastar', $italian);
+    }
+    // example:end
 
     public function testTheStyleGuideShowsEveryElementButStaysUnlisted(): void
     {
@@ -41,6 +53,7 @@ final class PagesTest extends AppTestCase
         self::assertStringNotContainsString('href="/style-guide"', self::body($this->request($app, '/')), 'not in the menu');
     }
 
+    // example:start
     public function testClockActionStreamsTheServerTime(): void
     {
         $app = $this->app();
@@ -80,6 +93,7 @@ final class PagesTest extends AppTestCase
         self::assertMatchesRegularExpression('#<script type="module" src="/build/assets/home-[^"]+\.js"></script>#', self::body($this->request($app, '/')));
         self::assertStringNotContainsString('/build/assets/home-', self::body($this->request($app, '/blog')));
     }
+    // example:end
 
     public function testThemeIsAppliedBeforeAnythingElseInTheHead(): void
     {
@@ -108,13 +122,16 @@ final class PagesTest extends AppTestCase
     {
         // The real content/, not the fixtures: a broken post or collection file fails here, in CI.
         $app = $this->site();
-        self::assertTrue($app->posts()->exists());
-        self::assertNotEmpty($app->collections->warmup());
+        $app->posts()->all();
+        $app->collections->warmup();
         self::assertTrue($app->pages()->exists());
         self::assertSame([], $app->shadowedPages(), 'no content page hidden behind a route');
 
+        // example:start
+        self::assertTrue($app->posts()->exists());
         self::assertMatchesRegularExpression('#What is TinyTank\?.*Where does the content live\?.*How fast is it\?#s', self::body($this->request($app, '/')));
         self::assertMatchesRegularExpression('#Che cos&\#039;è TinyTank\?.*Dove si trovano i contenuti\?.*Quanto è veloce\?#s', self::body($this->request($app, '/it')));
+        // example:end
     }
 
     public function testContentPagesWithTheirTemplatesAndTheFooterMenu(): void
@@ -126,6 +143,7 @@ final class PagesTest extends AppTestCase
         self::assertStringContainsString('href="/about/credits"', $about, 'pages/about.twig lists the child pages');
         self::assertMatchesRegularExpression('#<footer.*href="/about".*href="/privacy".*</footer>#s', $about, 'menu in `order`');
 
+        // example:start (the sample translation)
         // Italian slugs (slug: in index.it.md): its own URLs, and the folder paths redirect there.
         $credits = self::body($this->request($app, '/it/chi-siamo/riconoscimenti'));
         self::assertStringContainsString('<h1 class="mb-8 text-4xl font-bold tracking-tight">Riconoscimenti</h1>', $credits);
@@ -135,42 +153,48 @@ final class PagesTest extends AppTestCase
         self::assertSame([301, '/it/chi-siamo/riconoscimenti'], [$moved->getStatusCode(), $moved->headers->get('Location')]);
         $post = $this->request($app, '/it/blog/hello-tinytank');
         self::assertSame([301, '/it/blog/ciao-tinytank'], [$post->getStatusCode(), $post->headers->get('Location')]);
+        // example:end
 
         $missing = $this->request($app, '/nope');
         self::assertSame(404, $missing->getStatusCode());
         self::assertStringContainsString('Page not found.', self::body($missing));
     }
 
-    public function testContentComponentsRenderInPosts(): void
+    public function testContentComponentsAndResponsiveImages(): void
     {
         // Production mode: a missing video poster is never downloaded during a request (only by deploy).
+        $app = $this->site();
+        $guide = $this->request($app, '/style-guide');
+        $html = self::body($guide);
+
+        // ::youtube, a framework default component: click-to-load, the player allowed on this page only.
+        self::assertStringContainsString('data-src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ', $html);
+        self::assertStringContainsString('frame-src', (string) $guide->headers->get('Content-Security-Policy'));
+        self::assertStringNotContainsString('frame-src', (string) $this->request($app, '/about')->headers->get('Content-Security-Policy'));
+
+        // A photo next to the page: modern versions at several widths, the original's size, lazy.
+        self::assertStringContainsString('<source type="image/webp" srcset="/media/pages/style-guide/sample-photo.jpg.480w.webp 480w, /media/pages/style-guide/sample-photo.jpg.960w.webp 960w', $html);
+        self::assertStringContainsString('<img src="/media/pages/style-guide/sample-photo.jpg" alt="A green and orange sample landscape" width="1600" height="1000" loading="lazy" decoding="async"', $html);
+        if (in_array('avif', $app->images->formats, true)) {
+            self::assertStringContainsString('<source type="image/avif"', $html);
+        }
+    }
+
+    // example:start (the sample posts)
+    public function testRelatedPostsAndACoverInTheSamplePosts(): void
+    {
         $app = $this->site();
 
         // ::related-posts{limit=2} at the end of the post: templates/_components/related-posts.twig.
         $post = self::body($this->request($app, '/blog/hello-tinytank'));
         self::assertMatchesRegularExpression('#<h2[^>]*>Related posts</h2>.*href="/blog/markdown-cheatsheet"#s', $post);
         self::assertStringNotContainsString('href="/blog/hello-tinytank" class="hover:underline"', $post, 'not the post itself');
-
         // The cheatsheet shows the syntax in a code block: text, not a component.
-        $cheatsheet = $this->request($app, '/blog/markdown-cheatsheet');
-        self::assertStringContainsString('<code class="language-md">::related-posts{limit=2}', self::body($cheatsheet));
-
-        // ::youtube, a framework default component: click-to-load, the player allowed on this page only.
-        self::assertStringContainsString('data-src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ', self::body($cheatsheet));
-        self::assertStringContainsString('frame-src', (string) $cheatsheet->headers->get('Content-Security-Policy'));
-        self::assertStringNotContainsString('frame-src', (string) $this->request($app, '/blog/hello-tinytank')->headers->get('Content-Security-Policy'));
-    }
-
-    public function testPostImagesAreResponsive(): void
-    {
-        $app = $this->site();
-        $html = self::body($this->request($app, '/blog/hello-tinytank'));
+        self::assertStringContainsString('<code class="language-md">::related-posts{limit=2}', self::body($this->request($app, '/blog/markdown-cheatsheet')));
 
         // The cover through image(): modern versions at several widths, the original's size, not lazy.
-        self::assertStringContainsString('<source type="image/webp" srcset="/media/blog/hello-tinytank/cover.png.480w.webp 480w, /media/blog/hello-tinytank/cover.png.960w.webp 960w, /media/blog/hello-tinytank/cover.png.1200w.webp 1200w"', $html);
-        self::assertStringContainsString('<img src="/media/blog/hello-tinytank/cover.png" alt="" width="1200" height="630" loading="eager" decoding="async" fetchpriority="high"', $html);
-        if (in_array('avif', $app->images->formats, true)) {
-            self::assertStringContainsString('<source type="image/avif"', $html);
-        }
+        self::assertStringContainsString('<source type="image/webp" srcset="/media/blog/hello-tinytank/cover.png.480w.webp 480w, /media/blog/hello-tinytank/cover.png.960w.webp 960w, /media/blog/hello-tinytank/cover.png.1200w.webp 1200w"', $post);
+        self::assertStringContainsString('<img src="/media/blog/hello-tinytank/cover.png" alt="" width="1200" height="630" loading="eager" decoding="async" fetchpriority="high"', $post);
     }
+    // example:end
 }

@@ -30,8 +30,10 @@ ddev npm install && ddev npm run dev     # https://my-site.ddev.site, with hot r
 ```
 
 `create-project` prepares the site for you: its own name, `.env` with a fresh secret, a tracked
-`composer.lock`, CI on that lock file. (With GitHub's **Use this template** button instead: clone
-your new repository and run `php bin/create-site.php` once.)
+`composer.lock`, CI on that lock file. It asks whether to keep TinyTank's examples (demos, sample
+posts, an Italian translation) to learn from; `php bin/console site:clean` removes them later, with
+their tests. (With GitHub's **Use this template** button instead: clone your new repository and run
+`php bin/create-site.php` once.)
 
 Then work through the [Starting a site](https://docs.tinytank.dev/1.x/getting-started/checklist)
 checklist: your site's identity, the starter content (including the style guide at `/style-guide`),

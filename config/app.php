@@ -53,7 +53,11 @@ return [
     // Purge single pages with `bin/console cdn:purge blog/my-post`.
     'cdn' => [
         'enabled' => getenv('CDN_CACHE') === '1',
-        'exclude' => ['clock'],
+        'exclude' => [
+            // example:start
+            'clock', // the home page's clock demo answers with the time: never cached
+            // example:end
+        ],
         'purge' => getenv('CDN_PURGE') ?: null,   // cloudflare, bunny or command
         'cloudflare' => ['zone' => getenv('CLOUDFLARE_ZONE_ID') ?: null, 'token' => getenv('CLOUDFLARE_API_TOKEN') ?: null],
         'bunny' => ['pull_zone' => getenv('BUNNY_PULL_ZONE_ID') ?: null, 'key' => getenv('BUNNY_API_KEY') ?: null],
@@ -61,15 +65,17 @@ return [
     ],
     // Comma-separated IPs/CIDRs of reverse proxies whose X-Forwarded-* headers are trusted ('REMOTE_ADDR' = the direct peer).
     'trusted_proxies' => array_values(array_filter(array_map('trim', explode(',', (string) getenv('APP_TRUSTED_PROXIES'))))),
+    // What visitors who haven't picked a theme get: 'system' (their setting), 'light' or 'dark'.
+    'theme' => ['default' => 'system'],
     // Default language: served without a URL prefix (/blog). Every other language in `languages`
     // gets its code as prefix (/it/blog). An Italian-only site: 'language' => 'it' and list only 'it';
     // add 'en' later and English appears under /en/. UI texts live in translations/<code>.php.
-    // What visitors who haven't picked a theme get: 'system' (their setting), 'light' or 'dark'.
-    'theme' => ['default' => 'system'],
     'language' => 'en',
     'languages' => [
         'en' => ['name' => 'English', 'locale' => 'en_US'],
+        // example:start (the sample translation: `php bin/console site:clean` removes it)
         'it' => ['name' => 'Italiano', 'locale' => 'it_IT'],
+        // example:end
     ],
     'blog' => [
         // Posts per page on /blog. Set BLOG_PER_PAGE=1 in .env to try pagination with only a few posts.
@@ -96,7 +102,9 @@ return [
         'name' => 'TinyTank',
         'description' => [
             'en' => 'A database-free PHP micro framework for static-like dynamic sites.',
+            // example:start
             'it' => 'Un micro framework PHP senza database per siti dinamici veloci come quelli statici.',
+            // example:end
         ],
         'image' => null,   // default share image, e.g. '/images/og-default.png' or ['en' => …, 'it' => …]
         'author' => null,  // used for blog posts and the feed; defaults to the site name

@@ -37,7 +37,7 @@ test('reduced motion stops movement, keeps colour fades, and lets an allowed eff
         return getComputedStyle(element).animationDuration;
     }));
 
-    await page.goto('/blog/markdown-cheatsheet');
+    await page.goto('/style-guide');
     expect(await transition()).toContain('transform');
     expect(await animations()).toEqual(['2s', '2s']);
 

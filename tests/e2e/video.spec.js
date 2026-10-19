@@ -9,7 +9,7 @@ test('the video loads from YouTube only after pressing play', async ({ page }) =
         return route.fulfill({ status: 204 });
     });
 
-    await page.goto('/blog/markdown-cheatsheet');
+    await page.goto('/style-guide');
     const player = page.locator('figure iframe');
     await expect(player).toBeHidden();
     await expect(player).not.toHaveAttribute('src');

@@ -3,7 +3,7 @@ import { expect, test } from './fixtures.js';
 test.use({ javaScriptEnabled: false, colorScheme: 'dark' });
 
 test('without JavaScript the site still works', async ({ page }) => {
-    await page.goto('/blog/markdown-cheatsheet');
+    await page.goto('/style-guide');
 
     // Colours follow the system (no data-theme), the theme switcher is hidden, the video is a link.
     expect(await page.locator('html').getAttribute('data-theme')).toBeNull();

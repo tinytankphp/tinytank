@@ -42,6 +42,10 @@ return [
     'Method not allowed.' => 'Metodo non consentito.',
     'Something went wrong.' => 'Si è verificato un errore.',
 
+    // The home page, and its box about the examples
+    'Latest posts' => 'Ultimi articoli',
+    'These are TinyTank\'s examples.' => 'Questi sono gli esempi di TinyTank.',
+    'The demos below, the FAQ, the sample posts and the Italian translation show how things work. When you\'re done with them, one command removes them all, with their tests:' => 'Le demo qui sotto, le FAQ, gli articoli di esempio e la traduzione italiana mostrano come funziona. Quando non ti servono più, un solo comando li rimuove tutti, insieme ai loro test:',
     // Datastar demo
     'Datastar demo' => 'Demo Datastar',
     'Fruit search' => 'Cerca frutta',

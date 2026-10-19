@@ -8,8 +8,12 @@ declare(strict_types=1);
  * from GitHub's "Use this template" button instead, run it yourself, once: `php bin/create-site.php`.
  *
  * It names everything after the site's folder (my-site), creates .env with a fresh APP_SECRET,
- * commits to composer.lock, removes the files that are about developing TinyTank itself, and then
+ * commits to composer.lock, removes the files that are about developing TinyTank itself, asks
+ * whether to keep TinyTank's examples (demos, sample posts, the sample translation), and then
  * removes itself. What it can't decide for you is in the docs' "Starting a site" checklist.
+ *
+ * Without a terminal (CI, --no-interaction) it keeps the examples; choose up front with
+ * --keep-examples or --remove-examples. `php bin/console site:clean` removes them any time later.
  */
 
 $root = dirname(__DIR__);
@@ -104,6 +108,32 @@ $write('README.md', <<<MD
     Next: the [Starting a site](https://docs.tinytank.dev/1.x/getting-started/checklist) checklist.
 
     MD);
+
+// TinyTank's examples: kept to learn from, or removed now (the same as `php bin/console site:clean`).
+$options = array_slice($argv, 1);
+$keep = match (true) {
+    in_array('--remove-examples', $options, true) => false,
+    in_array('--keep-examples', $options, true) => true,
+    function_exists('stream_isatty') && stream_isatty(STDIN) => (static function (): bool {
+        echo "\n  Keep TinyTank's examples (demos on the home page, sample posts, an Italian translation)?\n"
+            . "  They show how things work; `php bin/console site:clean` removes them any time. [Y/n] ";
+        $answer = strtolower(trim((string) fgets(STDIN)));
+
+        return $answer === '' || $answer[0] !== 'n';
+    })(),
+    default => true,
+};
+if (!$keep) {
+    if (!is_file("{$root}/vendor/autoload.php")) {
+        fwrite(STDERR, "  Can't remove the examples before `composer install`: run `php bin/console site:clean` afterwards.\n");
+    } else {
+        require "{$root}/vendor/autoload.php";
+        (new TinyTank\Console\Examples($root))->clean();
+        $done[] = 'removed TinyTank\'s examples: the site starts clean';
+    }
+} elseif (is_file("{$root}/.examples")) {
+    $done[] = 'kept TinyTank\'s examples: `php bin/console site:clean` removes them when you\'re done';
+}
 
 // Files about developing TinyTank itself, and this script with its test.
 foreach (['ROADMAP.md', 'CONTRIBUTING.md', 'LICENSE', 'SECURITY.md', 'tests/CreateSiteTest.php', 'bin/create-site.php'] as $file) {

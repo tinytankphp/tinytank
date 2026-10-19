@@ -1,0 +1,30 @@
+# TinyTank's starter examples. `php bin/console site:clean` deletes the files and folders listed
+# here, and every block between an "example:start" and an "example:end" line in the site's files
+# (config, templates, tests…), then this list. Until then, `deploy` reminds you they're here.
+
+# The demos on the home page: Datastar in the browser and on the server, a JavaScript module
+templates/_examples
+templates/_partials/search.twig
+templates/_partials/like.twig
+templates/_partials/clock.twig
+src/Controller/ClockController.php
+resources/js/pages/home.js
+tests/e2e/datastar.spec.js
+tests/e2e/persist.spec.js
+
+# The FAQ, a data collection
+content/faq
+
+# The sample posts
+content/blog/2026
+content/blog/drafts/work-in-progress
+
+# The sample translation (Italian)
+translations/it.php
+content/pages/*/index.it.md
+content/pages/*/*/index.it.md
+tests/data/content/blog/2026/09/first/index.it.md
+tests/e2e/languages.spec.js
+
+# The test that cleaning leaves a working site
+tests/CleanSiteTest.php

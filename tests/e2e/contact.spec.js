@@ -32,14 +32,14 @@ test.describe('without JavaScript', () => {
     test.use({ javaScriptEnabled: false });
 
     test('the form is a normal post, and a refresh cannot send it twice', async ({ page }) => {
-        await page.goto('/it/contatti');
-        await page.getByLabel('Nome').fill('Ada Lovelace');
+        await page.goto('/contact');
+        await page.getByLabel('Name').fill('Ada Lovelace');
         await page.getByLabel('Email').fill('ada@example.test');
-        await page.getByLabel('Messaggio').fill('Ciao, una domanda su TinyTank.');
+        await page.getByLabel('Message').fill('Hello, a question about TinyTank.');
         await page.waitForTimeout(humanPause);
-        await page.getByRole('button', { name: 'Invia' }).click();
+        await page.getByRole('button', { name: 'Send' }).click();
 
-        await expect(page).toHaveURL(/\/it\/contatti\?sent=1$/);
-        await expect(page.getByRole('status')).toHaveText('Grazie! Il tuo messaggio è in viaggio.');
+        await expect(page).toHaveURL(/\/contact\?sent=1$/);
+        await expect(page.getByRole('status')).toHaveText('Thanks! Your message is on its way.');
     });
 });

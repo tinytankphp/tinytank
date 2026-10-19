@@ -1,74 +1,31 @@
 {% extends '_layout.twig' %}
 
-{# This page's own bundle, added by the layout after app.js. #}
+{# The home page (HomeController): your site's front door. #}
+{# example:start #}
+{# The demos' own bundle, added by the layout after app.js. #}
 {% set page_scripts = ['resources/js/pages/home.js'] %}
+{# example:end #}
 
 {% block content %}
-    <h1 class="mb-8 text-3xl font-bold tracking-tight">{{ 'Datastar demo'|t }}</h1>
+    <h1 class="mb-2 text-3xl font-bold tracking-tight">{{ site.name }}</h1>
+    <p class="mb-10 text-lg text-muted">{{ site.description }}</p>
 
-    <section class="mb-10 space-y-3">
-        <h2 class="text-lg font-semibold">{{ 'Fruit search'|t }}</h2>
-        {# GET: renders _partials/search.twig, which is auto-patched by element id. #}
-        <input data-bind:query placeholder="{{ 'Search…'|t }}"
-               class="w-full rounded-md border border-line-strong bg-surface px-3 py-2"
-               data-on:input__debounce.200ms="{{ datastar.get('_partials/search') }}">
-        <ul id="results"></ul>
-    </section>
+    {# example:start #}
+    {% include '_examples/home.twig' %}
+    {# example:end #}
 
-    <section class="mb-10 space-y-3">
-        <h2 class="text-lg font-semibold">{{ 'Signed template action'|t }}</h2>
-        {# POST with signed, tamper-proof variables (cross-site requests are blocked by the kernel). #}
-        <button class="rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover"
-                data-on:click="{{ datastar.post('_partials/like', {fruit: 'Mango'}) }}">{{ 'Like mango'|t }}</button>
-        <p id="likes">{{ 'Nothing liked yet.'|t }}</p>
-        <p data-signals="{liked: false}" data-show="$liked" class="text-success">{{ 'Thanks for the like!'|t }}</p>
-    </section>
-
-    <section class="mb-10 space-y-3" data-signals="{_tone: {playing: false, volume: 0.5, running: false, supported: true}}">
-        <h2 class="text-lg font-semibold">{{ 'JavaScript module'|t }}</h2>
-        {# Datastar drives the controls; resources/js/pages/home.js plays the tone (see the comments there). #}
-        <p class="text-sm text-muted">{{ 'Datastar drives the controls, a JavaScript module plays the sound and remembers the volume.'|t }}</p>
-        <div class="flex flex-wrap items-center gap-4" data-show="$_tone.supported">
-            <button class="rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover"
-                    data-on:click="$_tone.playing = !$_tone.playing" data-attr:aria-pressed="String($_tone.playing)">
-                <span data-show="!$_tone.playing">{{ 'Play a tone'|t }}</span>
-                <span data-show="$_tone.playing" style="display: none">{{ 'Stop'|t }}</span>
-            </button>
-            <label class="flex items-center gap-2">
-                {{ 'Volume'|t }}
-                <input type="range" min="0" max="1" step="0.01" data-bind:_tone.volume class="accent-primary">
-                <span class="w-12 tabular-nums" data-text="Math.round($_tone.volume * 100) + '%'"></span>
-            </label>
-            <span class="flex items-center gap-1.5 text-sm text-muted">
-                <span class="size-2 rounded-full bg-line-strong" data-class:bg-success="$_tone.running"></span>
-                <span data-show="$_tone.running" style="display: none">{{ 'Sound on'|t }}</span>
-                <span data-show="!$_tone.running">{{ 'Sound off'|t }}</span>
-            </span>
-        </div>
-        <p data-show="!$_tone.supported" style="display: none" class="text-muted">{{ 'This browser does not support Web Audio.'|t }}</p>
-    </section>
-
-    <section class="mb-10 space-y-3">
-        <h2 class="text-lg font-semibold">{{ 'Data collection'|t }}</h2>
-        {# content/faq/*.md, defined in config/collections.php: queried here, in the page's language, sorted by `order`. #}
-        <div class="divide-y divide-line rounded-md border border-line bg-surface">
-            {% for item in collection('faq') %}
-                <details class="group px-4 py-3" lang="{{ item.language }}">
-                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
-                        {{ item.question }}
-                        <span class="icon-[lucide--chevron-down] size-4 shrink-0 text-subtle transition-transform group-open:rotate-180" aria-hidden="true"></span>
-                    </summary>
-                    <div class="prose prose-stone dark:prose-invert mt-2 max-w-none text-muted">{{ content(item) }}</div>
-                </details>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="space-y-3">
-        <h2 class="text-lg font-semibold">{{ 'Custom route'|t }}</h2>
-        {# POST to a custom route defined in config/routes.php. #}
-        <button class="rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover"
-                data-on:click="{{ datastar.action('post', path('clock')) }}">{{ 'What time is it?'|t }}</button>
-        <p id="clock"></p>
-    </section>
+    {% set latest = posts().limit(3).all() %}
+    {% if latest %}
+        <section>
+            <h2 class="mb-4 text-lg font-semibold">{{ 'Latest posts'|t }}</h2>
+            <ul class="space-y-3">
+                {% for post in latest %}
+                    <li>
+                        <a href="{{ path('blog_post', {slug: post.slug}) }}" class="font-medium hover:underline">{{ post.title }}</a>
+                        <span class="text-sm text-subtle">· <time datetime="{{ post.date }}">{{ post.date|format_date('long', locale: site.locale) }}</time></span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
 {% endblock %}

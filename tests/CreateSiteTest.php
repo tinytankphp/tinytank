@@ -51,6 +51,26 @@ final class CreateSiteTest extends KernelTestCase
         }
         self::assertFileExists("{$site}/content/pages/style-guide/index.md", 'starter content stays: the checklist decides');
         self::assertFileExists("{$site}/AGENTS.md", 'instructions for coding agents stay with the site');
+
+        // Without a terminal (as here, or with --no-interaction), the examples stay, and it says how to remove them.
+        self::assertFileExists("{$site}/.examples");
+        self::assertFileExists("{$site}/templates/_examples/home.twig");
+        self::assertStringContainsString('kept TinyTank\'s examples: `php bin/console site:clean` removes them', implode("\n", $output));
+    }
+
+    public function testTheExamplesCanGoRightAway(): void
+    {
+        $site = $this->skeletonCopy();
+        symlink(dirname(__DIR__) . '/vendor', "{$site}/vendor"); // as after `composer create-project`
+        exec('php ' . escapeshellarg("{$site}/bin/create-site.php") . ' --remove-examples 2>&1', $output, $code);
+
+        self::assertSame(0, $code, implode("\n", $output));
+        self::assertStringContainsString('removed TinyTank\'s examples', implode("\n", $output));
+        self::assertFileDoesNotExist("{$site}/.examples");
+        self::assertFileDoesNotExist("{$site}/templates/_examples/home.twig");
+        self::assertFileDoesNotExist("{$site}/translations/it.php");
+        self::assertStringNotContainsString('example' . ':start', (string) file_get_contents("{$site}/config/routes.php")); // split: not a marker itself
+        self::assertFileExists("{$site}/content/pages/style-guide/index.md", 'the style guide is no example');
     }
 
     public function testAnExistingEnvIsKept(): void

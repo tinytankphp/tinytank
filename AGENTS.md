@@ -9,6 +9,13 @@ compiled ahead of time). The framework is the Composer package `tinytank/framewo
 index: https://docs.tinytank.dev/llms.txt). Every page also exists as Markdown: append `.md` to its
 URL, e.g. https://docs.tinytank.dev/1.x/content/pages.md. Read the relevant page before guessing.
 
+<!-- example:start -->
+**This site still has TinyTank's starter examples** (listed in `.examples`: the home page demos, a
+FAQ, sample posts, an Italian translation). When the user wants their own site rather than the
+demos, remove them all, with their tests, with `php bin/console site:clean --force`: don't delete
+them by hand. This paragraph goes with them.
+<!-- example:end -->
+
 ## What TinyTank is not
 
 Don't bring habits from Laravel or Symfony that don't apply here:
@@ -82,8 +89,8 @@ With DDEV, prefix commands with `ddev` (`ddev composer test`, `ddev npm run dev`
 ## Before you finish
 
 - `composer test`, `composer analyse` and the browser tests pass. The skeleton's tests check its
-  starter content: when you change or remove an example, update its tests (the list is in
-  `1.x/getting-started/checklist`).
+  starter content: when you change a starter page, update its tests (the list is in
+  `1.x/getting-started/checklist`); the examples go all at once with `site:clean`.
 - Changed content or templates show in development right away; in production they need
   `php bin/console deploy`.
 - No secrets in templates, JavaScript or `public` config values: secrets live in `.env`.

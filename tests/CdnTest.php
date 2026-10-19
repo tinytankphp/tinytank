@@ -14,7 +14,7 @@ final class CdnTest extends AppTestCase
     {
         $app = $this->site(overrides: ['cdn' => ['enabled' => true]]);
 
-        foreach (['/', '/blog', '/about', '/it/chi-siamo'] as $page) {
+        foreach (['/', '/blog', '/about', '/privacy'] as $page) {
             self::assertStringContainsString('s-maxage=', (string) $this->request($app, $page)->headers->get('Cache-Control'), $page);
         }
         self::assertSame('no-store, private', $this->request($app, '/contact')->headers->get('Cache-Control'), 'its spam check token is new every time');

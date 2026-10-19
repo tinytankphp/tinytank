@@ -1,10 +1,13 @@
 import { expect, test } from './fixtures.js';
 
-// Every URL in the sitemap (both languages, posts and content pages) loads cleanly.
+// Every URL in the sitemap (every language, posts and content pages) loads cleanly.
 test('every page in the sitemap loads without errors', async ({ page, request, baseURL }) => {
     const sitemap = await (await request.get('/sitemap.xml')).text();
     const paths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, url]) => new URL(url).pathname);
-    expect(paths.length).toBeGreaterThan(8);
+    expect(paths.length).toBeGreaterThan(4);
+    // example:start
+    expect(paths.length).toBeGreaterThan(8); // both languages and the sample posts
+    // example:end
 
     for (const path of paths) {
         const response = await page.goto(path);

@@ -42,9 +42,11 @@ final class ContactTest extends AppTestCase
         self::assertStringContainsString('Use at least 10 characters.', $html);
         self::assertStringContainsString('value="nope"', $html, 'what was typed is kept');
 
+        // example:start (the sample translation)
         $italian = self::body($this->post('/it/contatti', ['email' => 'nope']));
         self::assertStringContainsString('Campo obbligatorio.', $italian);
         self::assertStringContainsString('Inserisci un indirizzo email valido.', $italian);
+        // example:end
     }
 
     public function testDatastarGetsTheFormBackInPlace(): void

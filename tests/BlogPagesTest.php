@@ -46,7 +46,9 @@ final class BlogPagesTest extends AppTestCase
 
         self::assertSame('/blog', $this->request($app, '/blog/page/1')->headers->get('Location'));
         self::assertSame(301, $this->request($app, '/blog/page/1')->getStatusCode());
+        // example:start (the sample translation)
         self::assertSame('/it/blog', $this->request($app, '/it/blog/page/1')->headers->get('Location'));
+        // example:end
     }
 
     public function testPagesPastTheEndAre404(): void
@@ -56,11 +58,14 @@ final class BlogPagesTest extends AppTestCase
         self::assertSame(404, $this->request($app, '/blog/page/4')->getStatusCode());
         self::assertSame(404, $this->request($app, '/blog/page/0')->getStatusCode());
         self::assertSame(404, $this->request($app, '/blog/page/99999999999999999999')->getStatusCode(), 'not a 500');
+        // example:start
         $it = $this->request($app, '/it/blog/page/2');
         self::assertSame(404, $it->getStatusCode(), 'Italian has one post, so one page');
         self::assertStringContainsString('Pagina non trovata.', self::body($it));
+        // example:end
     }
 
+    // example:start (the sample translation: `php bin/console site:clean` removes these tests with it)
     public function testPagesExistingInOneLanguageOnlyGetAFallbackInTheSwitcher(): void
     {
         $html = self::body($this->request($this->app(), '/blog/page/2'));
@@ -100,6 +105,7 @@ final class BlogPagesTest extends AppTestCase
         self::assertStringContainsString('Articolo non trovato.', self::body($response));
         self::assertMatchesRegularExpression('#<a href="/blog/second" lang="en" hreflang="en"#', self::body($response));
     }
+    // example:end
 
     public function testLoadMoreAppendsTheNextPageAndReplacesThePager(): void
     {
@@ -136,8 +142,10 @@ final class BlogPagesTest extends AppTestCase
         $app = $this->app();
 
         self::assertSame(3, substr_count(self::body($this->request($app, '/blog/feed.xml')), '<entry>'));
+        // example:start
         $it = self::body($this->request($app, '/it/blog/feed.xml'));
         self::assertSame(1, substr_count($it, '<entry>'));
         self::assertStringContainsString('<title>Primo articolo</title>', $it);
+        // example:end
     }
 }
