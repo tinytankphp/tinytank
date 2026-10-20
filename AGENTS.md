@@ -95,6 +95,7 @@ composer analyse                          # PHPStan, level 8
 CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e   # Playwright, against a build (npm run build)
 php bin/console deploy                    # production: compile everything (see the deploy docs)
 php bin/console build:static              # or: the site as plain files in deploy/, for a static host
+php bin/console preview:static            # that build, served as its host will (:8080)
 php bin/console cache:clear               # back to development after a local deploy
 ```
 
