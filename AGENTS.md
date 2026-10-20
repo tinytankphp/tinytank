@@ -37,20 +37,26 @@ Don't bring habits from Laravel or Symfony that don't apply here:
 |---|---|---|
 | A page of text (About, Team, Services…) | `content/pages/<path>/index.md` with front matter (`title`, `summary`…). The folder is the URL; no route or controller. | `1.x/content/pages` |
 | A page only reachable by its link (thank-you, preview) | `unlisted: true` in its front matter: noindex, not in the sitemap; menus filter `where('unlisted', false)` | `1.x/content/pages#unlisted-pages` |
-| Repeating items with the same fields (services, team, projects) | a **data collection**: fields in `config/collections.php`, one file per item in `content/<name>/` (YAML or Markdown); query with `collection('name')` | `1.x/content/collections` |
+| Repeating items with the same fields (services, team, projects) | a **data collection**: fields in `config/collections.php`, one file per item in `content/<name>/` (YAML or Markdown); query with `collection('name')`. An item with images of its own is a folder, `content/<name>/<slug>/index.md` plus files (`image: cover.jpg`, responsive through `image()`) | `1.x/content/collections` |
+| Several pages sharing one template (reviews, case studies under one parent) | child pages of one parent; `children: {template: pages/review.twig}` in the parent's front matter instead of `template:` in each | `1.x/content/pages#templates` |
 | A blog post | `content/blog/YYYY/MM/<slug>/index.md`; drafts in `content/blog/drafts/` | `1.x/content/posts` |
 | A page that computes on each request | a route in `config/routes.php`, a controller in `src/Controller/`, a template in `templates/` | `1.x/getting-started/first-page` |
 | Browser-only interactivity (toggle, counter, tabs) | Datastar signals: `data-signals="{open: false}"`, `data-on:click="$open = !$open"`, `data-show="$open"` | `1.x/basics/datastar` |
 | Interactivity the server decides (search, forms, lookups) | a template action: `{{ datastar.post('_partials/x') }}` renders `templates/_partials/x.twig` with the browser's `signals` | `1.x/basics/datastar` |
 | A value every template needs (social links, phone, address) | `config/globals.php` returns an array; templates read `{{ globals.socials.github }}`. Public: no secrets | `1.x/basics/templates#global-values` |
 | A form that emails | `config/forms.php` and `form:` in a content page's front matter | `1.x/features/forms` |
+| Movement on hover or scroll (a card that lifts, a row that slides) | Tailwind's `motion-safe:` (`motion-safe:hover:-translate-y-1`); an effect a visitor switches on knowingly can keep moving with the class `motion-allowed` | `1.x/features/frontend#accessibility-basics` |
+| The site as plain files for a static host (no PHP on the server) | `php bin/console build:static` (output `deploy/`, Cloudflare Workers by default; `static` in `config/app.php`). Templates check `{% if not site.static %}`; a form works there with `'static' => ['from' => …]` and `form_action()` | `1.x/deployment/static` |
 | Images | put them next to the Markdown and reference them (`![Alt](photo.jpg)`): responsive AVIF/WebP automatically; in Twig, `image()` | `1.x/features/images` |
 | A reusable block inside Markdown | a content component: `::name{key="value"}` on its own line renders `templates/_components/name.twig` | `1.x/content/components` |
 | UI texts in several languages | `{{ 'Text'|t }}` and `translations/<code>.php` | `1.x/features/languages` |
 | A console command or deploy step | `src/Command/`, `$app->addDeployStep()` in `config/bootstrap.php` | `1.x/extending/commands` |
 
 Templates **query** content; nothing is injected: `pages()`, `posts()`, `collection('name')`, with
-`.where()`, `.orderBy()`, `.limit()`, `.one()`, `.all()` (see `1.x/basics/querying`).
+`.where()`, `.orderBy()`, `.limit()`, `.one()`, `.all()`; paths inside a field
+(`.where('data.featured', true)`, `.orderBy('data.date desc')`); `.except(item)` for "all but this
+one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and collection items have
+`reading_minutes` (see `1.x/basics/querying`).
 
 ## Rules that trip people up
 
@@ -66,6 +72,11 @@ Templates **query** content; nothing is injected: `pages()`, `posts()`, `collect
   Changes that need authorization belong in a controller, not a template action.
 - **Pages need assets:** run `npm run dev` (with `APP_DEBUG=1`) or `npm run build`; without either,
   pages fail with "Vite manifest not found".
+- **A static build has no server:** Datastar actions that call the server (`datastar.get(…)`,
+  routes) and forms posting to the site stop `build:static` with a list. Wrap them in
+  `{% if not site.static %}`, or give the form a `static` sender. Browser-only Datastar keeps working.
+- **`content()` can be stored, `block()` can't:** `{% set body = content(post) %}{{ body }}` prints
+  HTML, but a `{% set x = block('name') %}` is plain text, escaped when printed: use `|raw` there.
 - **Pages are public and cacheable** (ETag, optional CDN). Never render visitor-specific data in a
   page; send `Cache-Control: private` from the controller if you must.
 - **`page` and `blog_post` are reserved route names** (TinyTank writes translated URLs for them):
@@ -81,6 +92,7 @@ composer test                             # PHPUnit (tests/)
 composer analyse                          # PHPStan, level 8
 CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e   # Playwright, against a build (npm run build)
 php bin/console deploy                    # production: compile everything (see the deploy docs)
+php bin/console build:static              # or: the site as plain files in deploy/, for a static host
 php bin/console cache:clear               # back to development after a local deploy
 ```
 

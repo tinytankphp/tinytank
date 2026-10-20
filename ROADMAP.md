@@ -583,7 +583,8 @@ costs nothing when off.
 
 The same site, two outputs: the PHP site as today (`deploy`), or a folder of plain files for a static
 host (`build:static`), with development dynamic in both cases. Same content, templates and assets:
-no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an adapter.
+no second framework. Decided 2026-10-19: Cloudflare first, hosts behind an adapter; 2026-10-20:
+Cloudflare Workers with static assets rather than Pages (Workers can send email).
 
 ```php
 // config/app.php
@@ -610,10 +611,13 @@ no second framework. Decided 2026-10-19: Cloudflare Pages first, hosts behind an
       `blog.html`), so URLs stay exactly the PHP site's (`/blog`, no added slash or redirect).
       Done for `cloudflare` and `none`, checked with `wrangler pages dev`: `<path>.html`, merged rules
       detached with `! Content-Security-Policy`. `netlify` when needed (check its rule merging first)
-- [ ] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
+- [~] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
       browser); forms posting to a service or a function (an endpoint per form in
-      `config/forms.php`), same markup and messages; later, functions an adapter can add
-      (Cloudflare Pages Functions)
+      `config/forms.php`), same markup and messages. Forms done (2026-10-20): Cloudflare
+      Workers instead of Pages (Pages Functions have no email binding), a generated Worker
+      sending through Email Routing's `send_email` to the verified address, run first only for
+      `/forms/*` (browsers post forms as navigations, which the file server refuses). Search next.
+      Later: the timing check and rate limit on the host
 - [ ] **4. Preview**: serve the output folder locally, to check the site exactly as uploaded
 
 ---
