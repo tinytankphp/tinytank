@@ -79,6 +79,11 @@ one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and c
   `data-show`, as the blog search does. Browser-only Datastar keeps working.
 - **`content()` can be stored, `block()` can't:** `{% set body = content(post) %}{{ body }}` prints
   HTML, but a `{% set x = block('name') %}` is plain text, escaped when printed: use `|raw` there.
+- **`publish:static` needs a Cloudflare API token with two policies:** Workers Scripts: Edit and
+  Account Settings: Read on the *account*, Workers Routes: Edit on the *domain*. Workers permissions
+  under a domain-only policy don't count ("No access to the specified resource"). Passwords in
+  `.env` go in single quotes: unquoted or double-quoted, `$NAME` is read as a variable. A static
+  form that answers "wasn't sent": `npx wrangler tail` in `deploy/` shows why.
 - **Pages are public and cacheable** (ETag, optional CDN). Never render visitor-specific data in a
   page; send `Cache-Control: private` from the controller if you must.
 - **`page` and `blog_post` are reserved route names** (TinyTank writes translated URLs for them):
