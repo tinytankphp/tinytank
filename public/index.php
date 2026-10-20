@@ -13,5 +13,6 @@ if (PHP_SAPI === 'cli-server') {
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-// Routes live in config/routes.php so bin/console can compile them too.
-TinyTank\Kernel::boot(dirname(__DIR__))->run();
+// Routes live in config/routes.php so bin/console can compile them too. If the site can't start,
+// visitors get a plain 500 page and PHP's log says why (with APP_DEBUG=1, the error shows).
+TinyTank\Kernel::serve(dirname(__DIR__));

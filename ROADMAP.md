@@ -349,23 +349,27 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 - [ ] Possibly extract the response policy (caching, CSP, headers) from the Kernel while there, and
       replace the bound-closure read of Symfony's cache-control state with an explicit marker
 
-### [ ] 3.4 Deploy safety and `bin/console check`
-- [ ] **Build first, switch last**: `deploy` empties `var/cache` before validating anything, so a
+### [x] 3.4 Deploy safety and `bin/console check`
+- [x] **Build first, switch last**: `deploy` empties `var/cache` before validating anything, so a
       failure halfway leaves the live site half-built. Compile into `var/cache.next/` (and publish media
       to a `.next` folder), validate, then swap; keep `.prev` for `deploy --rollback`. Acceptance: a
-      failing step leaves the old site intact
-- [ ] **Runtime state out of the cache**: form rate limits live in `var/cache/forms/`, so every deploy
-      resets them. Move them (and the alert dedup file) to `var/state/`, kept across deploys
-- [ ] **Missing Vite manifest fails the deploy** (pages need it), with an opt-out for sites without Vite
-- [ ] **`bin/console check`**, read-only preflight, also run first by `deploy`: PHP version and
+      failing step leaves the old site intact. Done (2026-10-21) as `var/deploy/next/` and `prev/`, a
+      `switch` step; Twig templates written into the cache explicitly (a class already loaded in the
+      process is otherwise not written)
+- [x] **Runtime state out of the cache**: form rate limits live in `var/cache/forms/`, so every deploy
+      resets them. Move them (and the alert dedup file) to `var/state/`, kept across deploys. Done; the
+      alert dedup file was already in `var/log/`
+- [x] **Missing Vite manifest fails the deploy** (pages need it), with an opt-out for sites without Vite
+- [x] **`bin/console check`**, read-only preflight, also run first by `deploy`: PHP version and
       extensions, image driver and formats, `APP_SECRET`/`APP_URL`, writable `var/`, content compiles,
       **page templates and forms exist** (a page with a missing `template:` deploys today, then 500s),
       components, the Vite manifest and its entries, shadowed pages; `--json` for CI
-- [ ] **Images loaded lazily**: without GD or Imagick the site doesn't boot at all today, even pages
+- [x] **Images loaded lazily**: without GD or Imagick the site doesn't boot at all today, even pages
       without images (`Images` probes the driver in its constructor)
-- [ ] **Boot errors handled**: a minimal `try/catch` in `public/index.php` (plain 500 and PHP's log in
-      production, rethrow in debug), since errors during `boot()` bypass the framework's handler
-- [ ] Docs: a release-directory recipe (Deployer, symlinked `current/`) for servers where you control
+- [x] **Boot errors handled**: a minimal `try/catch` in `public/index.php` (plain 500 and PHP's log in
+      production, rethrow in debug), since errors during `boot()` bypass the framework's handler. Done
+      as `Kernel::serve()`, so later fixes arrive with the framework
+- [x] Docs: a release-directory recipe (Deployer, symlinked `current/`) for servers where you control
       the web root
 
 ### [ ] 3.5 Small site features and docs

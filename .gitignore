@@ -12,6 +12,9 @@
 /var/images/
 # Logs, kept on the server only (see config/app.php `log`)
 /var/log/
+# What the site keeps across deploys (form rate limits), and deploy's next and previous builds
+/var/state/
+/var/deploy/
 /.ddev/.env*
 .env
 .env.*

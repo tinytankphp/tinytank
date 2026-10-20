@@ -99,7 +99,9 @@ npm run dev                               # Vite dev server (or: npm run build)
 composer test                             # PHPUnit (tests/)
 composer analyse                          # PHPStan, level 8
 CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e   # Playwright, against a build (npm run build)
-php bin/console deploy                    # production: compile everything (see the deploy docs)
+php bin/console check                     # is the server and the site ready to deploy? (read-only)
+php bin/console deploy                    # production: check, build aside, then switch (see the deploy docs)
+php bin/console deploy --rollback         # the previous build back
 php bin/console build:static              # or: the site as plain files in deploy/, for a static host
 php bin/console preview:static            # that build, served as its host will (:4173)
 php bin/console publish:static            # build and publish it on Cloudflare (API token in .env)
@@ -114,5 +116,6 @@ With DDEV, prefix commands with `ddev` (`ddev composer test`, `ddev npm run dev`
   starter content: when you change a starter page, update its tests (the list is in
   `1.x/getting-started/checklist`); the examples go all at once with `site:clean`.
 - Changed content or templates show in development right away; in production they need
-  `php bin/console deploy`.
+  `php bin/console deploy`. `php bin/console check` finds what would stop it (a page's missing
+  template, an entry point not in the Vite build) without changing anything.
 - No secrets in templates, JavaScript or `public` config values: secrets live in `.env`.
