@@ -23,11 +23,11 @@ web_extra_exposed_ports:
       container_port: 5173
       http_port: 5172
       https_port: 5173
-    # The static build's preview (php bin/console preview:static) at https://<project>.ddev.site:8080
+    # The static build's preview (php bin/console preview:static) at https://<project>.ddev.site:4173
     - name: static
-      container_port: 8080
-      http_port: 8079
-      https_port: 8080
+      container_port: 4173
+      http_port: 4172
+      https_port: 4173
     # Documentation (cd docs && npm run dev) at https://tinytank.ddev.site:5174
     - name: docs
       container_port: 5174

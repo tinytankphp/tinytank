@@ -39,7 +39,7 @@ final class CreateSiteTest extends KernelTestCase
         self::assertStringNotContainsString('tinytank', $ddev);
         self::assertStringNotContainsString('5174', $ddev, 'the docs port is for TinyTank maintainers');
         self::assertStringContainsString('container_port: 5173', $ddev, 'Vite stays');
-        self::assertStringContainsString('container_port: 8080', $ddev, 'the static preview stays');
+        self::assertStringContainsString('container_port: 4173', $ddev, 'the static preview stays');
 
         $ci = (string) file_get_contents("{$site}/.github/workflows/ci.yml");
         self::assertStringContainsString('run: composer install --no-interaction', $ci);
