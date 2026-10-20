@@ -128,6 +128,17 @@ final class BlogPagesTest extends AppTestCase
         self::assertStringNotContainsString('Load more', $next, 'no more matches');
     }
 
+    public function testEveryPostForTheSearchOnAStaticSite(): void
+    {
+        $response = $this->request($this->app(), '/blog/search');
+        $html = self::body($response);
+
+        self::assertSame('noindex', $response->headers->get('X-Robots-Tag'), 'not a page of its own');
+        self::assertStringStartsWith('<div id="blog-search"', ltrim($html), 'a fragment Datastar puts in place');
+        self::assertSame(3, substr_count($html, 'data-words='), 'every post, not a page of them');
+        self::assertMatchesRegularExpression('#data-tags="[^"]*guide[^"]*"\s+data-show="\(\$tag#', $html);
+    }
+
     public function testFeedPerLanguage(): void
     {
         $app = $this->app();

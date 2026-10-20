@@ -43,6 +43,15 @@ final class BlogController extends Controller
         return $this->render('blog/index.twig', ['result' => $result]);
     }
 
+    /**
+     * /blog/search: every post, for the search on a static site (templates/blog/search.twig). Not a
+     * page of its own: kept out of search engines.
+     */
+    public function search(): Response
+    {
+        return new Response($this->render('blog/search.twig'), Response::HTTP_OK, ['X-Robots-Tag' => 'noindex']);
+    }
+
     /** @param string $slug the URL segment in the current language: `slug:` in a translation can change it */
     public function show(string $slug): string|Response
     {

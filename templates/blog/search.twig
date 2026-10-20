@@ -1,0 +1,15 @@
+{#
+    Every post, for the blog's search on a static site (bin/console build:static): blog/index.twig
+    loads this from /blog/search on first use, in place of #blog-search, and each post shows while
+    it matches the search and the tag. On the PHP site the server searches instead.
+#}
+<div id="blog-search" data-show="$q.trim() !== '' || $tag !== ''" class="space-y-8">
+    {% for post in posts() %}
+        <div data-words="{{ (post.title ~ ' ' ~ post.summary ~ ' ' ~ post.tags|join(' '))|lower }}" data-tags="{{ post.tags|join(' ') }}"
+             data-show="($tag === '' || el.dataset.tags.split(' ').includes($tag)) && el.dataset.words.includes($q.trim().toLowerCase())">
+            {% include '_partials/blog-card.twig' %}
+        </div>
+    {% else %}
+        <p class="text-subtle">{{ 'No posts found.'|t }}</p>
+    {% endfor %}
+</div>

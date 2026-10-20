@@ -25,6 +25,8 @@ return static function (Kernel $app): void {
     $app->get('/', HomeController::class, 'home');
     $app->get('/blog', [BlogController::class, 'index'], 'blog');
     $app->get('/blog/page/{page}', [BlogController::class, 'index'], 'blog_page', ['page' => '[1-9][0-9]{0,5}']);
+    // Every post, for the blog's search on a static site (before blog_post: "search" isn't a post).
+    $app->get('/blog/search', [BlogController::class, 'search'], 'blog_search', sitemap: false);
     $app->get('/blog/{slug}', [BlogController::class, 'show'], 'blog_post', ['slug' => '[a-z0-9]+(?:-[a-z0-9]+)*']);
     // Post images and files. In production `deploy` copies them to public/, so this only runs in development.
     $app->get(Blog::ASSET_URL . '/{slug}/{file}', AssetController::class, 'blog_asset', ['file' => '.+']);

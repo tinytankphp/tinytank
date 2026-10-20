@@ -4,22 +4,33 @@
     <h1 class="mb-1 text-3xl font-bold tracking-tight">{{ 'Blog'|t }}</h1>
     <p class="mb-6 text-sm"><a href="{{ path('blog_feed') }}" class="text-subtle hover:underline">{{ 'Atom feed'|t }}</a></p>
 
-    {# page: the last page shown, so "Load more" knows what comes next. Search and tags restart at 1. #}
-    <div data-signals="{q: '', tag: '', page: {{ result.page }}}" class="mb-8 space-y-3">
+    {# The search and the tags. On the PHP site the server filters (_partials/blog-results.twig). In a
+       static build the browser does: every post is loaded once, on first use, from /blog/search
+       (blog/search.twig), and shown while it matches. page: the last page shown, so "Load more" knows
+       what comes next; search and tags restart at 1. #}
+    {% set filter = site.static
+        ? '$_all || ($_all = true, ' ~ datastar.action('get', path('blog_search')) ~ ')'
+        : '$page = 1; ' ~ datastar.get('_partials/blog-results') %}
+    <div data-signals="{q: '', tag: '', page: {{ result.page }}, _all: false}" class="mb-8 space-y-3">
         <input type="search" data-bind:q placeholder="{{ 'Search posts…'|t }}"
                class="w-full rounded-md border border-line-strong bg-surface px-3 py-2"
-               data-on:input__debounce.200ms="$page = 1; {{ datastar.get('_partials/blog-results') }}">
+               data-on:input__debounce.200ms="{{ filter }}">
         <div class="flex flex-wrap gap-2 text-sm">
-            <button data-on:click="$tag = ''; $page = 1; {{ datastar.get('_partials/blog-results') }}"
+            <button data-on:click="$tag = ''; {{ filter }}"
                     data-class:bg-primary="$tag === ''" data-class:text-on-primary="$tag === ''"
                     class="rounded-full border border-line-strong px-3 py-1">{{ 'all'|t }}</button>
             {% for tag, count in posts().countBy('tags') %}
-                <button data-on:click="$tag = {{ tag|json_encode }}; $page = 1; {{ datastar.get('_partials/blog-results') }}"
+                <button data-on:click="$tag = {{ tag|json_encode }}; {{ filter }}"
                         data-class:bg-primary="$tag === {{ tag|json_encode }}" data-class:text-on-primary="$tag === {{ tag|json_encode }}"
                         class="rounded-full border border-line-strong px-3 py-1">{{ tag }} <span class="opacity-60">{{ count }}</span></button>
             {% endfor %}
         </div>
     </div>
 
-    {% include '_partials/blog-list.twig' %}
+    {% if site.static %}
+        <div data-show="$q.trim() === '' && $tag === ''">{% include '_partials/blog-list.twig' %}</div>
+        <div id="blog-search" style="display: none"></div>
+    {% else %}
+        {% include '_partials/blog-list.twig' %}
+    {% endif %}
 {% endblock %}

@@ -611,12 +611,14 @@ Cloudflare Workers with static assets rather than Pages (Workers can send email)
       `blog.html`), so URLs stay exactly the PHP site's (`/blog`, no added slash or redirect).
       Done for `cloudflare` and `none`, checked with `wrangler pages dev`: `<path>.html`, merged rules
       detached with `! Content-Security-Policy`. `netlify` when needed (check its rule merging first)
-- [~] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
+- [x] **3. The dynamic parts, statically**: blog search over a JSON index built at export (in the
       browser); forms posting to a service or a function (an endpoint per form in
       `config/forms.php`), same markup and messages. Forms done (2026-10-20): Cloudflare
       Workers instead of Pages (Pages Functions have no email binding), a generated Worker
       sending through Email Routing's `send_email` to the verified address, run first only for
-      `/forms/*` (browsers post forms as navigations, which the file server refuses). Search next.
+      `/forms/*` (browsers post forms as navigations, which the file server refuses). Search
+      done the same day, without an index: a `/blog/search` page with every post, fetched by a plain
+      Datastar GET on first use and filtered by `data-show`.
       Later: the timing check and rate limit on the host
 - [ ] **4. Preview**: serve the output folder locally, to check the site exactly as uploaded
 

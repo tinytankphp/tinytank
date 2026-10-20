@@ -72,9 +72,11 @@ one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and c
   Changes that need authorization belong in a controller, not a template action.
 - **Pages need assets:** run `npm run dev` (with `APP_DEBUG=1`) or `npm run build`; without either,
   pages fail with "Vite manifest not found".
-- **A static build has no server:** Datastar actions that call the server (`datastar.get(…)`,
-  routes) and forms posting to the site stop `build:static` with a list. Wrap them in
-  `{% if not site.static %}`, or give the form a `static` sender. Browser-only Datastar keeps working.
+- **A static build has no server:** template actions (`datastar.get('_partials/…')`), POSTs to
+  routes and forms posting to the site stop `build:static` with a list. Wrap them in
+  `{% if not site.static %}`, give the form a `static` sender, or load a page of the site with a
+  plain GET (`datastar.action('get', path('blog_search'))`, built as a file) and filter it with
+  `data-show`, as the blog search does. Browser-only Datastar keeps working.
 - **`content()` can be stored, `block()` can't:** `{% set body = content(post) %}{{ body }}` prints
   HTML, but a `{% set x = block('name') %}` is plain text, escaped when printed: use `|raw` there.
 - **Pages are public and cacheable** (ETag, optional CDN). Never render visitor-specific data in a
