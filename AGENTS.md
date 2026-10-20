@@ -46,7 +46,7 @@ Don't bring habits from Laravel or Symfony that don't apply here:
 | A value every template needs (social links, phone, address) | `config/globals.php` returns an array; templates read `{{ globals.socials.github }}`. Public: no secrets | `1.x/basics/templates#global-values` |
 | A form that emails | `config/forms.php` and `form:` in a content page's front matter | `1.x/features/forms` |
 | Movement on hover or scroll (a card that lifts, a row that slides) | Tailwind's `motion-safe:` (`motion-safe:hover:-translate-y-1`); an effect a visitor switches on knowingly can keep moving with the class `motion-allowed` | `1.x/features/frontend#accessibility-basics` |
-| The site as plain files for a static host (no PHP on the server) | `php bin/console build:static` (output `deploy/`, Cloudflare Workers by default; `static` in `config/app.php`). Templates check `{% if not site.static %}`; a form works there with `'static' => ['from' => …]` and `form_action()` | `1.x/deployment/static` |
+| The site as plain files for a static host (no PHP on the server) | `php bin/console build:static` (output `deploy/`, Cloudflare Workers by default; `static` in `config/app.php`). Templates check `{% if not site.static %}`; a form works there with `'static' => ['from' => …]` (`'send' => 'smtp'` for your own mail server, `SMTP_*` in `.env`) and `form_action()`; `publish:static` puts it online | `1.x/deployment/static` |
 | Images | put them next to the Markdown and reference them (`![Alt](photo.jpg)`): responsive AVIF/WebP automatically; in Twig, `image()` | `1.x/features/images` |
 | A reusable block inside Markdown | a content component: `::name{key="value"}` on its own line renders `templates/_components/name.twig` | `1.x/content/components` |
 | UI texts in several languages | `{{ 'Text'|t }}` and `translations/<code>.php` | `1.x/features/languages` |
@@ -96,6 +96,7 @@ CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e   # Playwright, against a build
 php bin/console deploy                    # production: compile everything (see the deploy docs)
 php bin/console build:static              # or: the site as plain files in deploy/, for a static host
 php bin/console preview:static            # that build, served as its host will (:4173)
+php bin/console publish:static            # build and publish it on Cloudflare (API token in .env)
 php bin/console cache:clear               # back to development after a local deploy
 ```
 

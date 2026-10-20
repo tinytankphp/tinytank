@@ -622,6 +622,11 @@ Cloudflare Workers with static assets rather than Pages (Workers can send email)
       Later: the timing check and rate limit on the host
 - [x] **4. Preview**: serve the output folder locally, to check the site exactly as uploaded. Done as
       `preview:static` (wrangler dev, or PHP with `--php`), with the port in DDEV
+- [x] **5. Publishing**: `publish:static` (2026-10-20): build, then `wrangler deploy` with an API
+      token from `.env` (no browser login, which a container can't receive). Email Sending through
+      the binding turned out to need Workers Paid, so forms can also send over SMTP
+      (`static.send: 'smtp'`, `cloudflare:sockets`, the server's settings as the Worker's secrets
+      from `.env`). Later: a GitHub Actions workflow that publishes on push
 
 ---
 
