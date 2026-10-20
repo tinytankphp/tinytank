@@ -370,9 +370,9 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 
 ### [ ] 3.5 Small site features and docs
 - [ ] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy
-- [~] ~~**`noindex` / `sitemap: false`** in page front matter~~: done as `unlisted: true` (noindex, not
-      in the sitemap, skipped by menus), for the lab909 style guide; a route option to stay out of the
-      sitemap is still open
+- [x] ~~**`noindex` / `sitemap: false`** in page front matter~~: done as `unlisted: true` (noindex, not
+      in the sitemap, skipped by menus), for the lab909 style guide; for routes, `sitemap: false`
+      (2026-10-20, for the blog search's list)
 - [ ] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
       `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413
 - [ ] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
