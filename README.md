@@ -11,6 +11,14 @@ JSON-LD, hreflang, sitemap, feeds) and **Vite + Tailwind CSS**. Requires PHP 8.4
 Everything a request needs is compiled ahead of time into plain PHP files in `var/cache`, which
 Opcache keeps in shared memory: no parsing, no database queries, no file scanning per request.
 
+## Status: beta (0.x)
+
+TinyTank runs real sites, but it's young: few sites run on it so far, and its API may still change
+between minor versions (each release's notes in the [changelog](https://github.com/tinytankphp/framework/blob/main/CHANGELOG.md) say what to
+update). Review it as you would any dependency before relying on it, and keep it updated: security
+fixes go into the latest release only ([SECURITY.md](SECURITY.md)). Provided as is, without
+warranty, under the [MIT license](LICENSE).
+
 TinyTank is freely inspired by [Craft CMS](https://craftcms.com) (Twig-first templates, content you
 query rather than receive, image transforms) and [Datastar](https://data-star.dev) (hypermedia: the
 server renders HTML, the browser stays light).
