@@ -400,6 +400,12 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 - [x] Docs: PHP-FPM (one kernel per request) is the supported model; worker servers aren't (yet).
       Done in Servers & Opcache, "How TinyTank runs"
 
+### Console names
+- [ ] **0.2: one name for the static commands.** `build:static`, `preview:static` and `publish:static`
+      have the aliases `static:build`, `static:preview`, `static:publish` (2026-10-29), the
+      thing:action order of `cache:clear` and `site:clean`. Decide which to keep, and drop the other
+      with an upgrade note
+
 ### Deferred until there's evidence
 Compiled media manifest (dimensions, variants, posters); content-hashed media URLs; query indexes and
 precomputed search text; request/response hooks (when Nocturne or an API needs them); CI matrix
