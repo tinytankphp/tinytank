@@ -659,7 +659,9 @@ Cloudflare Workers with static assets rather than Pages (Workers can send email)
       token from `.env` (no browser login, which a container can't receive). Email Sending through
       the binding turned out to need Workers Paid, so forms can also send over SMTP
       (`static.send: 'smtp'`, `cloudflare:sockets`, the server's settings as the Worker's secrets
-      from `.env`). Later: a GitHub Actions workflow that publishes on push
+      from `.env`). A GitHub Actions workflow that publishes on push: done (2026-10-29) for lab909 and
+      as a docs recipe (Publishing → From GitHub Actions); a `site:add` command once a second site
+      needs it
 
 ---
 
