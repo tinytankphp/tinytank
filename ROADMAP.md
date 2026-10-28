@@ -376,7 +376,9 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
       the web root
 
 ### [ ] 3.5 Small site features and docs
-- [ ] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy
+- [x] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy. Done
+      (2026-10-28): validated when the site starts (paths, statuses, no chains), checked by `check`
+      (an old path that still has a page, a target that doesn't answer), written by static builds
 - [x] ~~**`noindex` / `sitemap: false`** in page front matter~~: done as `unlisted: true` (noindex, not
       in the sitemap, skipped by menus), for the lab909 style guide; for routes, `sitemap: false`
       (2026-10-20, for the blog search's list)
