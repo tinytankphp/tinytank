@@ -1,4 +1,5 @@
 {# Datastar: search / tag filter. Page 1 of the matches; the whole output is auto-patched by id. #}
-{% set q = signals.q ?? '' %}
-{% set tag = signals.tag ?? '' %}
+{# signal(): the text sent, or '' (anything else a browser could send). #}
+{% set q = signal('q', max: 200) %}
+{% set tag = signal('tag', max: 100) %}
 {% include '_partials/blog-list.twig' with {result: posts().search(q).tag(tag).paginate(1), filtered: q != '' or tag != ''} %}

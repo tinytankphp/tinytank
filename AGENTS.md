@@ -69,6 +69,9 @@ one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and c
   and must also update HTML, wrap the HTML in `{% apply patch_elements %}…{% endapply %}`.
 - **ARIA states are strings:** `data-attr` writes a boolean as a bare attribute or removes it, so use
   `data-attr:aria-expanded="String($open)"`, not `="$open"`.
+- **Read signals with their type:** `signal('q')`, `signal_int('page', 1, min: 1, max: 1000)`,
+  `signal_bool()`, `signal_enum()` in templates, `$this->signals()->int(…)` in controllers. Not
+  `signals.page ?? 1`: a browser can send anything there.
 - **Datastar actions are bound to their method:** a `datastar.post()` URL answers only POST.
   Changes that need authorization belong in a controller, not a template action.
 - **Pages need assets:** run `npm run dev` (with `APP_DEBUG=1`) or `npm run build`; without either,

@@ -1,7 +1,7 @@
 {# Datastar: "Load more". Appends the next page (same search / tag filter) and replaces the pager. #}
-{% set q = signals.q ?? '' %}
-{% set tag = signals.tag ?? '' %}
-{% set result = posts().search(q).tag(tag).paginate(signals.page ?? 2) %}
+{% set q = signal('q', max: 200) %}
+{% set tag = signal('tag', max: 100) %}
+{% set result = posts().search(q).tag(tag).paginate(signal_int('page', 2, min: 2, max: 10000)) %}
 {% if result.items %}
     {% apply patch_elements({selector: '#blog-posts', mode: 'append'}) %}
         {% for post in result.items %}

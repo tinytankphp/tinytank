@@ -382,8 +382,10 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 - [x] ~~**`noindex` / `sitemap: false`** in page front matter~~: done as `unlisted: true` (noindex, not
       in the sitemap, skipped by menus), for the lab909 style guide; for routes, `sitemap: false`
       (2026-10-20, for the blog search's list)
-- [ ] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
-      `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413
+- [x] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
+      `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413. Done (2026-10-28) as
+      `signal()`, `signal_int()`, `signal_bool()`, `signal_enum()` and `$app->signals()`; 64 KB;
+      `HttpError` for the statuses
 - [x] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
       saves transfer, the handler still runs; what the log's defaults leave out vs. what your own
       messages may contain; the controllers guide's Blog methods (`find()`, `page()`, `search()`,

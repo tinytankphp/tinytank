@@ -128,6 +128,18 @@ final class BlogPagesTest extends AppTestCase
         self::assertStringNotContainsString('Load more', $next, 'no more matches');
     }
 
+    public function testWhateverABrowserSendsTheSearchAnswers(): void
+    {
+        $app = $this->app();
+        $search = $this->datastarUrl(self::body($this->request($app, '/blog')), '_partials/blog-results');
+
+        // Signals are read with their type (signal()): an array instead of text is an empty search.
+        $response = $this->request($app, $search . '&datastar=' . rawurlencode('{"q":["x"],"tag":{"a":1}}'));
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringContainsString('href="/blog/first"', self::body($response));
+        self::assertSame(400, $this->request($app, $search . '&datastar=' . rawurlencode('{"q":'))->getStatusCode(), 'not JSON');
+    }
+
     public function testEveryPostForTheSearchOnAStaticSite(): void
     {
         $response = $this->request($this->app(), '/blog/search');
