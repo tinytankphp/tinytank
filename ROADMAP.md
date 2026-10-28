@@ -391,8 +391,12 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
       messages may contain; the controllers guide's Blog methods (`find()`, `page()`, `search()`,
       `tags()` no longer exist); `composer test` runs the app's suite only. Done (2026-10-28); the token
       wording was already right
-- [ ] **SVG in `/media`**: a server snippet serving them with a script-blocking CSP, as development does
-- [ ] **Health check recipe** (docs): a route answering 200 when the compiled cache is readable
+- [x] **SVG in `/media`**: a server snippet serving them with a script-blocking CSP, as development does.
+      Done (2026-10-28) for nginx and Apache, both tried with a real server; a static build on
+      Cloudflare needs none (the site-wide policy applies to every file)
+- [x] **Health check recipe** (docs): a route answering 200 when the compiled cache is readable. Done
+      (2026-10-28), checking `var/state` instead: production rebuilds a missing cache on demand, so a
+      readable cache says nothing
 - [x] Docs: PHP-FPM (one kernel per request) is the supported model; worker servers aren't (yet).
       Done in Servers & Opcache, "How TinyTank runs"
 
