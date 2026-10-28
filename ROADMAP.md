@@ -340,14 +340,17 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
       confusable names): GitHub org `tinytankphp`, Packagist `tinytank/framework` and
       `tinytank/tinytank` (the skeleton, also for `composer create-project`), namespace `TinyTank\`.
 
-### [ ] 3.3 Caching boundary
-- [ ] A response with **`Set-Cookie`** (or one marked private by its handler) gets `private, no-store`,
+### [x] 3.3 Caching boundary
+- [x] A response with **`Set-Cookie`** (or one marked private by its handler) gets `private, no-store`,
       never `public`, CDN or not; `$app->noStore()` as the public version of what forms use. This is
-      the "pages that read the session are private" rule, decided before any login feature
-- [ ] Docs: `cdn->skip()` means "not at the CDN" (still `public, no-cache` for browsers), `noStore()`
+      the "pages that read the session are private" rule, decided before any login feature. Done
+      (2026-10-28): a cookie means `no-store, private` and no ETag, whatever the handler said; a
+      handler's own `private` is kept as it set it (it's already never public)
+- [x] Docs: `cdn->skip()` means "not at the CDN" (still `public, no-cache` for browsers), `noStore()`
       means "nowhere"; tests with CDN caching on
-- [ ] Possibly extract the response policy (caching, CSP, headers) from the Kernel while there, and
-      replace the bound-closure read of Symfony's cache-control state with an explicit marker
+- [x] ~~Possibly extract the response policy (caching, CSP, headers) from the Kernel while there, and
+      replace the bound-closure read of Symfony's cache-control state with an explicit marker~~: not
+      needed, the rules fit in a few lines of the kernel; the closure read stays, with its comment
 
 ### [x] 3.4 Deploy safety and `bin/console check`
 - [x] **Build first, switch last**: `deploy` empties `var/cache` before validating anything, so a

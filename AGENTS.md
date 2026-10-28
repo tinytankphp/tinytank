@@ -86,7 +86,8 @@ one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and c
   form that answers "wasn't sent": `npx wrangler tail --env-file ../.env` in `deploy/` shows why.
   More in `1.x/static-site-generator/troubleshooting`.
 - **Pages are public and cacheable** (ETag, optional CDN). Never render visitor-specific data in a
-  page; send `Cache-Control: private` from the controller if you must.
+  page; if a response must, call `$this->app->noStore()` in its controller (`no-store, private`).
+  A response that sets a cookie gets that by itself.
 - **`page` and `blog_post` are reserved route names** (TinyTank writes translated URLs for them):
   link with `path('page', {path: 'about'})` and `path('blog_post', {slug: post.slug})`.
 
