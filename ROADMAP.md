@@ -379,13 +379,15 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
       (2026-10-20, for the blog search's list)
 - [ ] **Typed signal helpers**: `signal('q', '')`, `signalInt('page', 1, max: 1000)`,
       `signalEnum('sort', […])`; malformed JSON → 400, oversized body → 413
-- [ ] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
+- [x] **Docs accuracy**: "one-time token" → signed timestamp token (age, not single use); "cheap 304"
       saves transfer, the handler still runs; what the log's defaults leave out vs. what your own
       messages may contain; the controllers guide's Blog methods (`find()`, `page()`, `search()`,
-      `tags()` no longer exist); `composer test` runs the app's suite only
+      `tags()` no longer exist); `composer test` runs the app's suite only. Done (2026-10-28); the token
+      wording was already right
 - [ ] **SVG in `/media`**: a server snippet serving them with a script-blocking CSP, as development does
 - [ ] **Health check recipe** (docs): a route answering 200 when the compiled cache is readable
-- [ ] Docs: PHP-FPM (one kernel per request) is the supported model; worker servers aren't (yet)
+- [x] Docs: PHP-FPM (one kernel per request) is the supported model; worker servers aren't (yet).
+      Done in Servers & Opcache, "How TinyTank runs"
 
 ### Deferred until there's evidence
 Compiled media manifest (dimensions, variants, posters); content-hashed media URLs; query indexes and
@@ -398,6 +400,12 @@ is synchronous); worker servers.
   default, or only run when a post uses them); splitting adds releases and docs for no runtime gain.
   The image driver is the real case, fixed by lazy loading
 - **PSR-7/PSR-15 middleware**: HttpFoundation is deliberate; a bridge only for a real integration
+- **Semgrep and Psalm's taint analysis in CI** (tried 2026-10-27/28): neither found a real issue.
+  Semgrep (`p/php`, `p/security-audit`, `p/secrets`) flagged 3 by-design lines in 99 files; Psalm's
+  taint analysis only sees TinyTank's input (`getString()`, `getContent()`, `getPathInfo()`) with
+  the Symfony plugin, an explicit Symfony version and a stub file, and then found one false positive
+  (a summary written to the cache with `var_export()`). Not worth two dev dependencies and a stub to
+  maintain: the repository stays lean. `composer audit` runs in CI instead
 - **Formal pilot programme and benchmarks**: Nocturne is the pilot
 
 ---
@@ -440,7 +448,9 @@ is synchronous); worker servers.
       when the CDN can be purged, 5 minutes otherwise. Purging: a `Purger` interface with Cloudflare,
       Bunny and a shell command built in (`CDN_PURGE`), others from packages (`$app->cdn->usePurger()`);
       `deploy` purges everything last; `bin/console cdn:purge blog/my-post | https://… | --all`.
-- [ ] **Static export** (to evaluate later; CDN caching gives most of the resilience first): render
+- [ ] **Static export on your own server** (mostly covered by the Static Site Generator, section 5b:
+      a whole site as files for a static host). What's left is the hybrid idea below, for a server
+      with PHP: render
       pages to HTML at deploy, served by nginx/Apache with `try_files`, PHP behind for forms and
       Datastar. Worth it for a cheap server without a CDN. Ideas so far: hybrid, opt-in **per route**
       (`static.routes`); pages found through the sitemap plus their links; only 200, public, not
@@ -498,8 +508,10 @@ docs at docs.tinytank.dev work well as the landing page; `tinytank.dev` redirect
 - [x] **The other pages**: the blog (cards, numbered pages, the search and tag filter kept), blog
       posts, About, Contact and every content page in the shared article layout (`data.heading`,
       `data.status`, `data.meta` for the line above the title)
-- [ ] Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN
-- [ ] Release the fixes found here as 0.1.x
+- [x] ~~Hosting with PHP 8.4, HTTPS, deploy with `bin/console deploy`; possibly a CDN~~: published as a
+      static site on Cloudflare Workers instead (section 5b), with the contact form sent over SMTP
+- [x] Release the fixes found here as 0.1.x: 0.1.6 (the retrospective), 0.1.7 (static builds), 0.1.8
+      (deploy safety)
 
 **Friction log** (fix in TinyTank, then tick):
 - [x] **No place for site-wide values** (social links): added `config/globals.php` → `globals`
