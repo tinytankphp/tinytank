@@ -375,7 +375,7 @@ Its advice, which we share: sharpen what exists rather than grow. Batches in the
 - [x] Docs: a release-directory recipe (Deployer, symlinked `current/`) for servers where you control
       the web root
 
-### [ ] 3.5 Small site features and docs
+### [x] 3.5 Small site features and docs
 - [x] **Redirect map** (`config/redirects.php`, old path => new path, 301), validated at deploy. Done
       (2026-10-28): validated when the site starts (paths, statuses, no chains), checked by `check`
       (an old path that still has a page, a target that doesn't answer), written by static builds
