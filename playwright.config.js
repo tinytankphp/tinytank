@@ -20,7 +20,8 @@ export default defineConfig({
     projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
     webServer: {
         // A clean cache first: production mode compiles content once, so a previous run's would be stale.
-        command: `php bin/console cache:clear && php -S 127.0.0.1:${port} -t public tests/e2e/router.php`,
+        // And no rate limits left by a previous run (var/state/ is kept across deploys, not test runs).
+        command: `php bin/console cache:clear && rm -rf var/state/forms && php -S 127.0.0.1:${port} -t public tests/e2e/router.php`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         stderr: 'ignore', // PHP's built-in server logs every request there
