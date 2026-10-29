@@ -45,6 +45,9 @@ return [
         'level' => getenv('LOG_LEVEL') ?: null,
         'days' => 14,
         'alert_to' => getenv('LOG_ALERT_TO') ?: null,
+        // Push alerts to your phone through Pushover (https://pushover.net), when both are set: errors
+        // here, and on a static site a form that couldn't be sent (publish:static uploads them).
+        'pushover' => ['token' => getenv('PUSHOVER_TOKEN') ?: null, 'user' => getenv('PUSHOVER_USER') ?: null],
     ],
     // Caching pages at a CDN (Cloudflare, Bunny…), off until CDN_CACHE=1: the CDN keeps each page for
     // `ttl` seconds and keeps serving it while this server is down (`stale_if_error`). Every route is

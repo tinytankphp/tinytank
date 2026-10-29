@@ -29,7 +29,8 @@ Don't bring habits from Laravel or Symfony that don't apply here:
 - **No `fetch()` or front-end framework for interactivity:** use Datastar (below).
 - **No raw HTML in Markdown:** it's escaped. Use Markdown, or a content component (`::name{…}`).
 - **No tracking or third-party embeds by default:** the site is privacy-first (no IP addresses in
-  logs, click-to-load videos, metadata stripped from images). Keep it that way.
+  logs, click-to-load videos, metadata stripped from images). Keep it that way. The one optional
+  service is Pushover for alerts (`PUSHOVER_TOKEN`, `PUSHOVER_USER`), off unless both are set.
 
 ## Where things go
 
