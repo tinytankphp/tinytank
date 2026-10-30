@@ -45,7 +45,8 @@
     --color-ink: light-dark(var(--color-stone-800), var(--color-stone-200));         /* body text */
     --color-strong: light-dark(var(--color-stone-900), var(--color-stone-50));       /* emphasis, hovers */
     --color-muted: light-dark(var(--color-stone-600), var(--color-stone-400));       /* secondary text */
-    --color-subtle: light-dark(var(--color-stone-500), var(--color-stone-500));      /* meta text */
+    /* meta text; dark: between stone-500 and 400, for 4.5:1 on the dark surfaces (WCAG AA) */
+    --color-subtle: light-dark(var(--color-stone-500), color-mix(in oklab, var(--color-stone-400) 50%, var(--color-stone-500)));
     --color-line: light-dark(var(--color-stone-200), var(--color-stone-800));        /* dividers */
     --color-line-strong: light-dark(var(--color-stone-300), var(--color-stone-700)); /* control borders */
     --color-chip: light-dark(var(--color-stone-200), var(--color-stone-800));        /* tags, hovers */

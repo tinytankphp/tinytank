@@ -1,0 +1,9 @@
+#!/bin/sh
+# Optional: checks accessibility before each push, against a fresh build (npm run test:a11y).
+# Turn it on once per clone:   git config core.hooksPath .githooks
+# Skip it for one push:        git push --no-verify
+# With DDEV, run git from inside the container (ddev ssh), where Chromium is, or set CHROMIUM_PATH.
+set -e
+echo "pre-push: building the assets and checking accessibility (npm run test:a11y)…"
+npm run build --silent
+npm run test:a11y

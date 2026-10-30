@@ -47,7 +47,7 @@ Don't bring habits from Laravel or Symfony that don't apply here:
 | A value every template needs (social links, phone, address) | `config/globals.php` returns an array; templates read `{{ globals.socials.github }}`. Public: no secrets | `1.x/basics/templates#global-values` |
 | A page that moved or was renamed (keep the old URL working) | `config/redirects.php`: `'/old-path' => '/new-path'` (301; `['to' => …, 'status' => 302]`) | `1.x/basics/routing#redirects` |
 | A form that emails | `config/forms.php` and `form:` in a content page's front matter | `1.x/features/forms` |
-| Movement on hover or scroll (a card that lifts, a row that slides) | Tailwind's `motion-safe:` (`motion-safe:hover:-translate-y-1`); an effect a visitor switches on knowingly can keep moving with the class `motion-allowed` | `1.x/features/frontend#accessibility-basics` |
+| Movement on hover or scroll (a card that lifts, a row that slides) | Tailwind's `motion-safe:` (`motion-safe:hover:-translate-y-1`); an effect a visitor switches on knowingly can keep moving with the class `motion-allowed` | `1.x/accessibility` |
 | The site as plain files for a static host (no PHP on the server) | `php bin/console build:static` (output `deploy/`, Cloudflare Workers by default; `static` in `config/app.php`). Templates check `{% if not site.static %}`; a form works there with `'static' => ['from' => …]` (`'send' => 'smtp'` for your own mail server, `SMTP_*` in `.env`) and `form_action()`; `publish:static` puts it online | `1.x/static-site-generator` |
 | Images | put them next to the Markdown and reference them (`![Alt](photo.jpg)`): responsive AVIF/WebP automatically; in Twig, `image()` | `1.x/features/images` |
 | A reusable block inside Markdown | a content component: `::name{key="value"}` on its own line renders `templates/_components/name.twig` | `1.x/content/components` |
@@ -68,6 +68,11 @@ one" and `.neighbours(item, wrap: true)` for previous / next. Posts, pages and c
   under `data:`. Dates are `YYYY-MM-DD` and must be real days.
 - **A Datastar partial that queues an event sends only its events.** If it calls `patch_signals`
   and must also update HTML, wrap the HTML in `{% apply patch_elements %}…{% endapply %}`.
+- **Accessibility is checked on every page, in both themes** (`tests/e2e/axe.spec.js`, WCAG 2.2 AA),
+  and a failure stops CI. After changing templates or CSS, run `npm run build && npm run test:a11y`.
+  Fix colours at the token in `resources/css/app.css`, in both themes; a button's accessible name
+  starts with its visible text. Accept a problem only in the test's `EXCEPTIONS`, with a reason.
+  See `1.x/accessibility`.
 - **ARIA states are strings:** `data-attr` writes a boolean as a bare attribute or removes it, so use
   `data-attr:aria-expanded="String($open)"`, not `="$open"`.
 - **Read signals with their type:** `signal('q')`, `signal_int('page', 1, min: 1, max: 1000)`,
@@ -105,6 +110,7 @@ npm run dev                               # Vite dev server (or: npm run build)
 composer test                             # PHPUnit (tests/)
 composer analyse                          # PHPStan, level 8
 CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e   # Playwright, against a build (npm run build)
+CHROMIUM_PATH=/usr/bin/chromium npm run test:a11y  # accessibility only: every page, both themes (axe)
 php bin/console check                     # is the server and the site ready to deploy? (read-only)
 php bin/console deploy                    # production: check, build aside, then switch (see the deploy docs)
 php bin/console deploy --rollback         # the previous build back

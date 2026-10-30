@@ -134,9 +134,13 @@ framework: it would have to assume the site's Tailwind setup and tokens, change 
 3. [ ] **If a second project wants them:** extract into an optional package (`tinytank/ui`) with the
    package convention (`addTemplates()`, overridable components, one line in `bootstrap.php`).
 4. [ ] **Docs:** a "Patterns" page with recipes to copy (native `<dialog>`, a toast with Datastar).
-5. [ ] **Automated accessibility checks:** axe-core (`@axe-core/playwright`) on every sitemap page in
+5. [x] **Automated accessibility checks:** axe-core (`@axe-core/playwright`) on every sitemap page in
    the browser tests, failing on violations such as low colour contrast, missing labels or broken
-   landmarks. Likely to flag a few of the lighter text colours (`text-subtle`) first.
+   landmarks. Likely to flag a few of the lighter text colours (`text-subtle`) first. Done
+   (2026-10-30): `tests/e2e/axe.spec.js` in the skeleton and lab909, both themes, blocking, with an
+   `EXCEPTIONS` list; `npm run test:a11y` and an optional pre-push hook; a docs section, Accessibility. It
+   found the dark theme's subtle text (skeleton), lab909's light-theme accents, unnamed task-list
+   checkboxes and a caption at 75% opacity (framework), and two sequencer buttons named unlike their text
 
 ### [x] Content Security Policy, cache-friendly
 The main missing security header. Use **hashes** of the few inline scripts instead of per-request
