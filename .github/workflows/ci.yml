@@ -33,8 +33,17 @@ jobs:
           composer config prefer-stable false
           composer update --no-interaction --no-progress --prefer-dist
 
+      # Fails on a PHP package with a known vulnerability (GitHub's and FriendsOfPHP's advisories).
+      - name: PHP dependency audit
+        run: composer audit --no-interaction
+
       - name: Install JS dependencies
         run: npm ci
+
+      # Fails on a high or critical advisory in the JavaScript packages (the build tools, Playwright).
+      # Moderate ones are reported in the log without failing: most concern only the build machine.
+      - name: JS dependency audit
+        run: npm audit --audit-level=high
 
       # Before the tests, so the ones that check built assets run too.
       - name: Build assets
