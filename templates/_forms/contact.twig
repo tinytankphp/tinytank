@@ -58,8 +58,13 @@
 
 
         <div class="flex flex-wrap items-center gap-4">
-            <button type="submit" data-attr:disabled="$_sending" class="rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover disabled:opacity-50">
-                <span data-show="!$_sending">{{ 'Send'|t }}</span><span data-show="$_sending" style="display: none">{{ 'Sending…'|t }}</span>
+            {# Disabled from the click until the answer arrives ($_sending, set by data-indicator on the
+               form), with a spinner: one message per click, and the visitor sees it's on its way. #}
+            <button type="submit" data-attr:disabled="$_sending" data-attr:aria-busy="String($_sending)" class="rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover disabled:cursor-wait disabled:opacity-60">
+                <span data-show="!$_sending">{{ 'Send'|t }}</span>
+                <span data-show="$_sending" style="display: none" class="inline-flex items-center gap-2">
+                    <span aria-hidden="true" data-spinner class="icon-[lucide--loader-circle] size-4 motion-safe:animate-spin"></span>{{ 'Sending…'|t }}
+                </span>
             </button>
             <p class="text-sm text-muted">
                 {{ 'We use your details only to reply to you.'|t }}
