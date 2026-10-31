@@ -11,13 +11,15 @@ TinyTank is three repositories:
 ## Maintainer setup: all three side by side
 
 Changes often span the framework, the skeleton and the docs. Work on them together by cloning the
-other two repositories **inside** this one. Both locations are gitignored, so nothing about them
-is ever published with the skeleton:
+other two repositories **inside** this one. `packages/*` is gitignored; `docs/` is excluded in your
+clone only (`.git/info/exclude`), so sites made from the skeleton don't inherit it. Nothing about
+either is ever published with the skeleton:
 
 ```sh
 git clone git@github.com:tinytankphp/tinytank.git && cd tinytank
 git clone git@github.com:tinytankphp/framework.git packages/tinytank
 git clone git@github.com:tinytankphp/docs.git docs
+printf '/docs/\n/sites/\n' >> .git/info/exclude   # this clone only
 ddev start
 ddev composer update tinytank/framework     # now symlinks packages/tinytank instead of using Packagist
 ```
@@ -29,7 +31,7 @@ Packagist. When `packages/tinytank` exists, Composer uses it and symlinks it int
 
 Because the source differs, `composer.lock` is never committed in the skeleton.
 
-Real sites built alongside TinyTank, to field-test it, can live in `sites/<name>/` (also gitignored),
+Real sites built alongside TinyTank, to field-test it, can live in `sites/<name>/` (excluded the same way),
 each its own repository created with `composer create-project tinytank/tinytank sites/<name>`.
 To try a framework change in such a site before it's released, link the clone into the site
 (`ln -s ../../../packages/tinytank sites/<name>/packages/tinytank`, then `composer update
